@@ -1,0 +1,12 @@
+{
+  "about": "Acerca de",
+  "login": "Acceder",
+  "online": "Conectados",
+  "queue.title": "Lista de reproducción",
+  "queue.empty": "La lista está vacía, añade una canción.",
+  "queue.add": "Añadir una canción",
+  "devices.title": "Dispositivos",
+  "devices.fetch": "Obtener dispositivos",
+  "devices.transfer": "Transferir",
+  "devices.empty": "La lista de dispositivos está vacía"
+}

@@ -1,0 +1,12 @@
+{
+  "about": "Quant a",
+  "login": "Accedir",
+  "online": "Conectats",
+  "queue.title": "Llista de reproducció",
+  "queue.empty": "La llista està buida, afegeix una cançó.",
+  "queue.add": "Afegir una cançó",
+  "devices.title": "Dispositius",
+  "devices.fetch": "Obtenir dispositius",
+  "devices.transfer": "Transferir",
+  "devices.empty": "La llista de dispositius està buida"
+}

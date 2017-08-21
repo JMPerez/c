@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script>
+  window.opener && window.opener.postMessage(JSON.stringify({
+    type:'access_token',
+    access_token: '<%= access_token %>',
+    expires_in: '<%= expires_in %>',
+    refresh_token: '<%= refresh_token %>'
+  }), '*');
+  window.close();
+  </script>
+</head>
+<body>
+  <span style="padding:2em; font: Helvetica, Arial; font-size: 12px; color: #333">
+  This page should close in a few seconds.
+</span>
+</body>
+</html>

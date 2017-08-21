@@ -1,0 +1,12 @@
+{
+  "about": "About",
+  "login": "Log in",
+  "online": "Online",
+  "queue.title": "Queue",
+  "queue.empty": "The queue is empty, add a song.",
+  "queue.add": "Add a song",
+  "devices.title": "Devices",
+  "devices.fetch": "Fetch devices",
+  "devices.transfer": "Transfer",
+  "devices.empty": "The list of devices is empty,"
+}
