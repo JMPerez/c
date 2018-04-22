@@ -22,4 +22,4 @@ Install the dependencies running `npm install`.
 
 During development, run `npm run dev`.
 
-When running on production, run `web: npm run build && npm run start`.
+When running on production, run `npm run build && npm run start`.
