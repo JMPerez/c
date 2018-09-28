@@ -17,9 +17,20 @@ export default class IntlDocument extends Document {
       <html>
         <Head>
           <title>C - Collaborative listening on Spotify</title>
+          <meta
+            name="description"
+            content="A collaborative queue where you propose and vote what's going to play next. Use your Spotify account to log in"
+          />
           <link rel="shortcut icon" href="/static/c-icon-128.png" />
           <meta name="viewport" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width" />
           <style>{`body { margin: 0 } /* custom! */`}</style>
+          <script async src="https://www.googletagmanager.com/gtag/js?id=UA-39254352-3" />
+          <script
+            dangerouslySetInnerHTML={{
+              __html:
+                "window.dataLayer = window.dataLayer || []; function gtag(){window.dataLayer.push(arguments)} gtag('js', new Date()); gtag('config', 'UA-39254352-3');"
+            }}
+          />
         </Head>
         <body className="custom_class">
           {this.props.customValue}
@@ -30,12 +41,6 @@ export default class IntlDocument extends Document {
             }}
           />
           <NextScript />
-          <script
-            dangerouslySetInnerHTML={{
-              __html:
-                "(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create','UA-39254352-1');ga('send','pageview');"
-            }}
-          />
         </body>
       </html>
     );
