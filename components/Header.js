@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { login } from '../actions/sessionActions';
 import { mutePlayback, unmutePlayback } from '../actions/playbackActions';
-import { ButtonStyle, ButtonDarkStyle } from './ButtonStyle';
+import ButtonStyle from './ButtonStyle';
+import ButtonDarkStyle from './ButtonDarkStyle';
 
 const linkStyle = {
   lineHeight: '30px',
