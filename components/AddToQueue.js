@@ -23,6 +23,21 @@ class ResultsList extends Component {
           .add-to-queue__search-results-item--focused {
             background-color: #eee;
           }
+          .container{
+            display: flex;
+          }
+          .album-img{
+              width: 64;
+              padding-right: 1em;
+          }
+          .flex-item{
+              flex-grow: 1;
+          }
+
+          .song-name {
+            font-size: 1.3em;
+            margin-bottom: 0.3em;
+          }
         `}</style>
         {results.map((r, index) => {
           const isFocused = focus === index;
@@ -30,7 +45,15 @@ class ResultsList extends Component {
             'add-to-queue__search-results-item' + (isFocused ? ' add-to-queue__search-results-item--focused' : '');
           return (
             <li key={r.id} className={className} onClick={() => this.props.onSelect(r.id)}>
-              {r.name} - {r.artists[0].name}
+              <div className="container">
+                <div className="album-img">
+                  <img src={r.album.images[2].url}/>
+                </div>
+                <div className="flex-item">
+                  <div className="song-name">{r.name}</div>
+                  <div>{r.artists[0].name}</div>
+                </div>
+              </div>
             </li>
           );
         })}
