@@ -36,12 +36,25 @@ export default ({ items }) => {
           text-transform: uppercase;
         }
       `}</style>
-      <h2 className="header-2"><FormattedMessage id="online" /></h2>
+      <h2 className="header-2">
+        <FormattedMessage id="online" />
+      </h2>
       <ul className="user-list">
         {items.map((i, index) => {
           const userName = i.display_name || i.id;
           return (
             <li key={index} className="user-list__item media">
+              <div>
+                <button
+                  className="btn btn--dark"
+                  disabled={radioMasterId === i.id}
+                  onClick={() => {
+                    fetchAvailableDevices();
+                  }}
+                >
+                  <FormattedMessage id="devices.fetch" />
+                </button>
+              </div>
               <div className="media__img">
                 <img
                   className="user-image"
@@ -52,9 +65,7 @@ export default ({ items }) => {
                   title={userName}
                 />
               </div>
-              <div className="user-name media__bd">
-                {userName}
-              </div>
+              <div className="user-name media__bd">{userName}</div>
             </li>
           );
         })}

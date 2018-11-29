@@ -6,7 +6,7 @@ import { initStore } from '../store/store';
 import { fetchQueue } from '../actions/queueActions';
 import { fetchUsers } from '../actions/usersActions';
 import { fetchPlayingContext } from '../actions/playbackActions';
-import Users from '../components/Users';
+import User from '../components/User';
 import Queue from '../components/Queue';
 import AddToQueue from '../components/AddToQueue';
 import NowPlaying from '../components/NowPlaying';
@@ -25,19 +25,24 @@ class Main extends React.Component {
   render() {
     return (
       <Layout>
-        {this.props.playing.track
-          ? <NowPlaying
-              track={this.props.playing.track}
-              user={this.props.playing.user}
-              position={this.props.playing.position}
-            />
-          : null}
+        {this.props.playing.track ? (
+          <NowPlaying
+            track={this.props.playing.track}
+            user={this.props.playing.user}
+            position={this.props.playing.position}
+          />
+        ) : null}
         <div className="app">
           <style jsx>
             {`
               .app {
                 margin: 20px;
                 padding: 20px;
+              }
+              .user-list {
+                list-style: none;
+                margin: 0;
+                padding: 0;
               }
             `}
           </style>
@@ -47,7 +52,14 @@ class Main extends React.Component {
             {this.props.session.user !== null ? <Devices /> : null}
           </div>
           <div style={{ float: 'right', width: '150px' }}>
-            <Users items={this.props.users} />
+            <h2 className="header-2">
+              <FormattedMessage id="online" />
+            </h2>
+            <ul className="user-list">
+              {this.props.users.map(user => {
+                return <User key={user.id} user={user} />;
+              })}
+            </ul>
           </div>
         </div>
       </Layout>
