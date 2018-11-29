@@ -29,7 +29,7 @@ class NowPlaying extends React.PureComponent {
     clearInterval(this.timer);
   }
   render() {
-    const percentage = +(this.state.currentPosition * 100 / this.props.track.duration_ms).toFixed(2) + '%';
+    const percentage = +((this.state.currentPosition * 100) / this.props.track.duration_ms).toFixed(2) + '%';
     const userName = this.props.user.display_name || this.props.user.id;
     return (
       <div className="now-playing">
@@ -61,7 +61,7 @@ class NowPlaying extends React.PureComponent {
           }
           .now-playing__progress_bar {
             bottom: 0;
-            background-color: #222;
+            background-color: #1db954;
             height: 5px;
             position: absolute;
             width: 100%;
@@ -88,18 +88,14 @@ class NowPlaying extends React.PureComponent {
             <img src={this.props.track.album.images[1].url} width="170" height="170" />
           </div>
           <div className="now-playing__bd media__bd">
-            <div className="now-playing__track-name">
-              {this.props.track.name}
-            </div>
-            <div className="now-playing__artist-name">
-              {this.props.track.artists.map(a => a.name).join(', ')}
-            </div>
+            <div className="now-playing__track-name">{this.props.track.name}</div>
+            <div className="now-playing__artist-name">{this.props.track.artists.map(a => a.name).join(', ')}</div>
             <div className="media__img">
               <img
                 className="user-image"
                 src={
                   (this.props.user.images && this.props.user.images.length && this.props.user.images[0].url) ||
-                    '/static/user-icon.png'
+                  '/static/user-icon.png'
                 }
                 width="30"
                 height="30"
@@ -107,9 +103,7 @@ class NowPlaying extends React.PureComponent {
                 title={userName}
               />
             </div>
-            <div className="user-name media__bd">
-              {userName}
-            </div>
+            <div className="user-name media__bd">{userName}</div>
           </div>
         </div>
         <div className="now-playing__progress">
