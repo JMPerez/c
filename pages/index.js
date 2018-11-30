@@ -25,13 +25,11 @@ class Main extends React.Component {
   render() {
     return (
       <Layout>
-        {this.props.playing.track ? (
-          <NowPlaying
-            track={this.props.playing.track}
-            user={this.props.playing.user}
-            position={this.props.playing.position}
-          />
-        ) : null}
+        <NowPlaying
+          track={this.props.playing.track}
+          user={this.props.playing.user}
+          position={this.props.playing.position}
+        />
         <div className="app">
           <style jsx>
             {`
@@ -43,6 +41,11 @@ class Main extends React.Component {
                 list-style: none;
                 margin: 0;
                 padding: 0;
+              }
+              .header-2 {
+                color: #999;
+                font-size: 11px;
+                text-transform: uppercase;
               }
             `}
           </style>

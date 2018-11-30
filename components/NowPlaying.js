@@ -28,19 +28,13 @@ class NowPlaying extends React.PureComponent {
   componentWillUnmount() {
     clearInterval(this.timer);
   }
-  render() {
+
+  nowPlayingView() {
     const percentage = +((this.state.currentPosition * 100) / this.props.track.duration_ms).toFixed(2) + '%';
     const userName = this.props.user.display_name || this.props.user.id;
     return (
-      <div className="now-playing">
+      <div>
         <style jsx>{`
-          .now-playing {
-            background-color: #424d58;
-            color: #fff;
-            height: 250px;
-            position: relative;
-            width: 100%;
-          }
           .now-playing__text {
             padding: 40px;
           }
@@ -109,6 +103,38 @@ class NowPlaying extends React.PureComponent {
         <div className="now-playing__progress">
           <div className="now-playing__progress_bar" style={{ width: percentage }} />
         </div>
+      </div>
+    );
+  }
+
+  nothingPlaying() {
+    return (
+      <div>
+        <style jsx>{`
+          .nothing-is-playing {
+            padding: 1em;
+          }
+        `}</style>
+        <div className="nothing-is-playing">
+          <h2>Nothing is playing</h2>
+        </div>
+      </div>
+    );
+  }
+
+  render() {
+    return (
+      <div>
+        <style jsx>{`
+          .now-playing {
+            background-color: #424d58;
+            color: #fff;
+            height: 250px;
+            position: relative;
+            width: 100%;
+          }
+        `}</style>
+        <div className="now-playing">{this.props.track === null ? this.nothingPlaying() : this.nowPlayingView()}</div>
       </div>
     );
   }

@@ -1,6 +1,4 @@
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
-import { connect } from 'react-redux';
 
 class User extends React.PureComponent {
   render() {
@@ -31,23 +29,18 @@ class User extends React.PureComponent {
             float: left;
             margin-right: 10px;
           }
-          .header-2 {
-            color: #999;
-            font-size: 11px;
-            text-transform: uppercase;
-          }
         `}</style>
         <li key={index} className="user-list__item media">
           <div>
-            {/*<button*/}
-            {/*className="btn btn--dark"*/}
-            {/*disabled={radioMasterId === user.id}*/}
-            {/*onClick={() => {*/}
-            {/*fetchAvailableDevices();*/}
-            {/*}}*/}
-            {/*>*/}
-            {/*Radio Master*/}
-            {/*</button>*/}
+            <button
+              className="btn btn--dark"
+              disabled={radioMasterId === user.id}
+              onClick={() => {
+                fetchAvailableDevices();
+              }}
+            >
+              Radio Master
+            </button>
           </div>
           <div className="media__img">
             <img

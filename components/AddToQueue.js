@@ -20,34 +20,31 @@ class ResultsList extends Component {
           .add-to-queue__search-results-item {
             padding: 5px 0 5px 5px;
           }
-          .add-to-queue__search-results-item--focused {
+          li.add-to-queue__search-results-item:hover {
             background-color: #eee;
           }
-          .container{
+          .container {
             display: flex;
           }
-          .album-img{
-              width: 64;
-              padding-right: 1em;
+          .album-img {
+            width: 64;
+            padding-right: 1em;
           }
-          .flex-item{
-              flex-grow: 1;
+          .flex-item {
+            flex-grow: 1;
           }
 
           .song-name {
-            font-size: 1.3em;
+            font-size: 1em;
             margin-bottom: 0.3em;
           }
         `}</style>
-        {results.map((r, index) => {
-          const isFocused = focus === index;
-          const className =
-            'add-to-queue__search-results-item' + (isFocused ? ' add-to-queue__search-results-item--focused' : '');
+        {results.map(r => {
           return (
-            <li key={r.id} className={className} onClick={() => this.props.onSelect(r.id)}>
+            <li key={r.id} className="add-to-queue__search-results-item" onClick={() => this.props.onSelect(r.id)}>
               <div className="container">
                 <div className="album-img">
-                  <img src={r.album.images[2].url}/>
+                  <img src={r.album.images[2].url} height="50" width="50" />
                 </div>
                 <div className="flex-item">
                   <div className="song-name">{r.name}</div>
@@ -129,7 +126,7 @@ class AddToQueue extends Component {
   };
 
   render() {
-    const placeholder = this.props.intl.formatMessage({id: 'queue.add'});
+    const placeholder = this.props.intl.formatMessage({ id: 'queue.add' });
     const results = this.props.search.results;
     return (
       <div className="add-to-queue" onBlur={this.handleBlur}>
@@ -163,4 +160,7 @@ const mapStateToProps = state => ({
   search: state.search
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(AddToQueue));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(injectIntl(AddToQueue));
