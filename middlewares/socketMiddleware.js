@@ -1,7 +1,7 @@
 import { VOTE_UP, LOGIN_SUCCESS, QUEUE_REMOVE_TRACK, QUEUE_TRACK } from '../constants/ActionTypes';
 import { updateUsers } from '../actions/usersActions';
 import { updateQueue, queueEnded } from '../actions/queueActions';
-import { updateNowPlaying, playTrack } from '../actions/playbackActions';
+import { playTrack } from '../actions/playbackActions';
 import Config from '../config/app';
 
 import io from 'socket.io-client';
@@ -69,11 +69,6 @@ export default function(store) {
 
   socket.on('queue ended', () => {
     store.dispatch(queueEnded());
-  });
-
-  socket.on('update now playing', (track, user, isPlaying) => {
-    // we should also set repeat to false!
-    store.dispatch(updateNowPlaying(track, user, isPlaying));
   });
 
   socket.on('play track', (track, user, position) => {

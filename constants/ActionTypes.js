@@ -18,6 +18,7 @@ export const LOGIN = 'LOGIN';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAILURE = 'LOGIN_FAILURE';
 
+export const UPDATE_TOKEN = 'UPDATE_TOKEN';
 export const UPDATE_TOKEN_SUCCESS = 'UPDATE_TOKEN_SUCCESS';
 export const UPDATE_CURRENT_USER = 'UPDATE_CURRENT_USER';
 export const PLAY_TRACK = 'PLAY_TRACK';
