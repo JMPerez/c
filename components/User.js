@@ -1,8 +1,10 @@
 import React from 'react';
+import { selectRadioMaster } from '../actions/usersActions';
+import { connect } from 'react-redux';
 
 class User extends React.PureComponent {
   render() {
-    const { user } = this.props;
+    const { user, selectRadioMaster } = this.props;
     const userName = user.display_name || user.id;
     const index = user.id;
     const radioMasterId = -1;
@@ -36,7 +38,7 @@ class User extends React.PureComponent {
               className="btn btn--dark"
               disabled={radioMasterId === user.id}
               onClick={() => {
-                fetchAvailableDevices();
+                selectRadioMaster(user.id);
               }}
             >
               Radio Master
@@ -60,4 +62,13 @@ class User extends React.PureComponent {
   }
 }
 
-export default User;
+const mapDispatchToProps = dispatch => ({
+  selectRadioMaster: userId => dispatch(selectRadioMaster(userId))
+});
+
+const mapStateToProps = state => ({});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(User);

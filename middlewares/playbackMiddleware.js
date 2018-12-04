@@ -2,7 +2,6 @@ import fetch from 'isomorphic-unfetch';
 
 import { PLAY_TRACK, UNMUTE_PLAYBACK } from '../constants/ActionTypes';
 import { playTrack, playTrackSuccess } from '../actions/playbackActions';
-import { fetchAvailableDevicesError, fetchAvailableDevicesSuccess } from '../actions/devicesActions';
 
 const SPOTIFY_API_BASE = 'https://api.spotify.com/v1';
 

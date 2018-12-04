@@ -17,7 +17,7 @@ export default (state, action) => {
         ...state,
         track: action.playingContext.track,
         user: action.playingContext.user,
-        position: 0
+        position: action.playingContext.position || 0
       };
     case PLAY_TRACK_SUCCESS:
       return {

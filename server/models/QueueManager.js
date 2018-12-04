@@ -14,6 +14,8 @@ class QueueManager {
     this.getToken = options.getToken;
     this.spotifyApi = options.spotifyApi;
     this.playedHistory = [];
+    this.radioMasterId = options.radioMasterId;
+    this.timer = null;
   }
 
   handleQueueChanged() {
@@ -67,6 +69,10 @@ class QueueManager {
       console.log('api.js > play has queue');
       // something to play!
       const queueItem = this.queue.shift();
+      let progress_ms = queueItem.track.progress_ms || 0;
+      if (progress_ms < 2000) {
+        progress_ms = 0;
+      }
       this.handleQueueChanged();
       this.playingContext = {
         track: queueItem.track,
@@ -78,7 +84,7 @@ class QueueManager {
         track: queueItem.track,
         user: queueItem.user
       });
-      setTimeout(() => {
+      this.timer = setTimeout(() => {
         this.play();
       }, 2000 + queueItem.track.duration_ms);
       this.onPlay();
@@ -108,12 +114,26 @@ class QueueManager {
     }
   }
 
+  changeRadioMasterId(userId) {
+    console.log('Inside queueManager ' + userId);
+    if (userId === 'Robot') {
+      userId = null;
+    }
+    this.radioMasterId = userId;
+    this.queue = [];
+    if (this.timer !== null) {
+      clearTimeout(this.timer);
+    }
+    this.play();
+  }
+
   save() {
     fs.writeFileSync(
       './queue.json',
       JSON.stringify({
         playingContext: this.playingContext,
-        queue: this.queue
+        queue: this.queue,
+        radioMasterId: this.radioMasterId
       }),
       ''
     );
@@ -124,6 +144,7 @@ class QueueManager {
       const data = JSON.parse(fs.readFileSync('./queue.json'));
       this.playingContext = data.playingContext;
       this.queue = data.queue;
+      this.radioMasterId = data.radioMasterId;
     } catch (e) {
       // do nothing;
     }

@@ -71,15 +71,19 @@ const queueManager = new QueueManager({
   onQueueEnded: async () => {
     globalSocket && globalSocket.emit('update queue', queueManager.getQueue());
     globalSocket && globalSocket.broadcast.emit('update queue', queueManager.getQueue());
-
-    const botRecommendation = await botUser.generateRecommendation(queueManager.playedHistory, getToken, spotifyApi);
-    if (botRecommendation !== null) {
-      queueManager.addItem(
-        new QueueItem({
-          track: botRecommendation,
-          user: botUser
-        }).toJSON()
-      );
+    if (queueManager.radioMasterId === null) {
+      const botRecommendation = await botUser.generateRecommendation(queueManager.playedHistory, getToken, spotifyApi);
+      if (botRecommendation !== null) {
+        queueManager.addItem(
+          new QueueItem({
+            track: botRecommendation,
+            user: botUser
+          }).toJSON()
+        );
+      }
+    } else {
+      globalSocket && globalSocket.emit('fetch radio master track', queueManager.radioMasterId);
+      globalSocket && globalSocket.broadcast.emit('fetch radio master track', queueManager.radioMasterId);
     }
   }
 });
@@ -117,6 +121,20 @@ const exportedApi = io => {
     }
   });
 
+  api.post('/radio-master-track', (req, res) => {
+    if (req.body.track !== null) {
+      let track = req.body.track;
+      // track.progress_ms = req.body.progress_ms;
+      queueManager.addItem(
+        new QueueItem({
+          track: track,
+          user: req.body.user
+        }).toJSON()
+      );
+    }
+    res.sendStatus(201);
+  });
+
   // web socket interface!
   io.on('connection', socket => {
     globalSocket = socket;
@@ -147,6 +165,10 @@ const exportedApi = io => {
     socket.on('remove track', id => {
       // todo: check that user is owner
       queueManager.removeId(socket.user, id);
+    });
+
+    socket.on('change radio master', userId => {
+      queueManager.changeRadioMasterId(userId);
     });
 
     socket.on('user login', user => {

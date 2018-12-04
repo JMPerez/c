@@ -49,9 +49,10 @@ nextApp.prepare().then(() => {
   app.set('view engine', 'ejs');
 
   // needed to parse refresh_token
+  app.use(bodyParser.json());
   app.use(
-    bodyParser.json({
-      limit: 1024
+    bodyParser.urlencoded({
+      extended: true
     })
   );
 

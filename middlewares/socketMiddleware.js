@@ -1,12 +1,15 @@
-import { VOTE_UP, LOGIN_SUCCESS, QUEUE_REMOVE_TRACK, QUEUE_TRACK } from '../constants/ActionTypes';
+import { VOTE_UP, LOGIN_SUCCESS, QUEUE_REMOVE_TRACK, QUEUE_TRACK, SELECT_RADIO_MASTER } from '../constants/ActionTypes';
 import { updateUsers } from '../actions/usersActions';
 import { updateQueue, queueEnded } from '../actions/queueActions';
-import { updateNowPlaying, playTrack } from '../actions/playbackActions';
+import { updateNowPlaying, playTrack, fetchPlayingContextSuccess } from '../actions/playbackActions';
 import Config from '../config/app';
+import fetch from 'isomorphic-unfetch';
 
 import io from 'socket.io-client';
 
-var socket = null;
+const SPOTIFY_API_BASE = 'https://api.spotify.com/v1';
+
+let socket = null;
 
 const getIdFromTrackString = (trackString = '') => {
   let matches = trackString.match(/^https:\/\/open\.spotify\.com\/track\/(.*)/);
@@ -52,6 +55,9 @@ export function socketMiddleware(store) {
         case VOTE_UP:
           socket.emit('vote up', action.id);
           break;
+        case SELECT_RADIO_MASTER:
+          socket.emit('change radio master', action.userId);
+          break;
         default:
           break;
       }
@@ -78,11 +84,41 @@ export default function(store) {
 
   socket.on('play track', (track, user, position) => {
     // we should also set repeat to false!
-    store.dispatch(playTrack(track, user, position));
+    if (store.getState().session.user && store.getState().session.user.id !== user.id) {
+      store.dispatch(playTrack(track, user, position));
+    } else {
+      store.dispatch(fetchPlayingContextSuccess({ track: track, user: user, position: position }));
+    }
   });
 
   socket.on('update users', data => {
     store.dispatch(updateUsers(data));
+  });
+
+  socket.on('fetch radio master track', radioMasterId => {
+    if (store.getState().session.user && store.getState().session.user.id === radioMasterId) {
+      console.log('fetch radio master track ' + radioMasterId);
+      fetch(`${SPOTIFY_API_BASE}/me/player/currently-playing`, {
+        method: 'GET',
+        headers: { Authorization: `Bearer ${store.getState().session.access_token}` }
+      })
+        .then(r => r.json())
+        .then(r => {
+          if (r.error) {
+            console.log(r.error);
+          } else {
+            fetch(`${Config.HOST}/api/radio-master-track`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                track: r.item,
+                user: store.getState().session.user,
+                progress_ms: r.progress_ms
+              })
+            });
+          }
+        });
+    }
   });
 
   // todo: manage end song, end queue
