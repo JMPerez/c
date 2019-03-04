@@ -43,7 +43,7 @@ export default store => next => action => {
     case LOAD: {
       const session = store.getState().session;
       const expiresIn = session.expires_in;
-      const needsToUpdate = !expiresIn || expiresIn < Date.now() - 10 * 60 * 1000;
+      const needsToUpdate = !expiresIn || expiresIn - Date.now() < 10 * 60 * 1000;
       if (needsToUpdate) {
         console.log('sessionMiddleware > needs to update access token');
         const refreshToken = session.refresh_token;
