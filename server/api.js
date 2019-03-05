@@ -151,23 +151,37 @@ const exportedApi = io => {
 
     socket.on('user login', user => {
       // todo: make request server-side to avoid tampering
-      users.push({
-        user: user,
-        socket: socket.id
+      let index = -1;
+      users.forEach((u, i) => {
+        if (u.user.id === user.id) {
+          index = i;
+        }
       });
-      socket.user = user;
-      socket.emit('update users', users.map(u => u.user));
-      socket.broadcast.emit('update users', users.map(u => u.user));
 
-      // check if user should start playing something
-      const playingContext = queueManager.getPlayingContext();
-      if (playingContext.track !== null) {
-        socket.emit(
-          'play track',
-          playingContext.track,
-          playingContext.user,
-          Date.now() - playingContext.startTimestamp
-        );
+      if (index !== -1) {
+        // user has already logged in
+        socket.emit('user has already logged in');
+      } else {
+        // user hasn't logged in
+        users.push({
+          // todo: modify structure, user attribute inside users?
+          user: user,
+          socket: socket.id
+        });
+        socket.user = user;
+        socket.emit('update users', users.map(u => u.user));
+        socket.broadcast.emit('update users', users.map(u => u.user));
+
+        // check if user should start playing something
+        const playingContext = queueManager.getPlayingContext();
+        if (playingContext.track !== null) {
+          socket.emit(
+            'play track',
+            playingContext.track,
+            playingContext.user,
+            Date.now() - playingContext.startTimestamp
+          );
+        }
       }
     });
 

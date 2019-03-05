@@ -17,6 +17,7 @@ export const LOAD = 'LOAD';
 export const LOGIN = 'LOGIN';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAILURE = 'LOGIN_FAILURE';
+export const USER_ALREADY_LOGGED_IN = 'USER_ALREADY_LOGGED_IN';
 
 export const UPDATE_TOKEN = 'UPDATE_TOKEN';
 export const UPDATE_TOKEN_SUCCESS = 'UPDATE_TOKEN_SUCCESS';
