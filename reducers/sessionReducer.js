@@ -1,10 +1,4 @@
-import {
-  LOAD,
-  LOGIN_SUCCESS,
-  UPDATE_TOKEN_SUCCESS,
-  UPDATE_CURRENT_USER,
-  USER_ALREADY_LOGGED_IN
-} from '../constants/ActionTypes';
+import { LOAD, LOGIN_SUCCESS, UPDATE_TOKEN_SUCCESS, UPDATE_CURRENT_USER } from '../constants/ActionTypes';
 
 const initialState = {
   refresh_token: null, //'localStorage' in window && localStorage.getItem('refreshToken'),
@@ -37,9 +31,6 @@ export default (state, action) => {
       return state;
     case UPDATE_CURRENT_USER:
       return Object.assign({}, state, { user: action.user });
-    case USER_ALREADY_LOGGED_IN:
-      // todo: hide everything, display message
-      return Object.assign({}, state, { alreadyLoggedIn: true });
     default:
       return state ? state : initialState;
   }

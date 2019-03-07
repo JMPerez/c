@@ -21,5 +21,3 @@ export const updateCurrentUser = user => ({
   type: types.UPDATE_CURRENT_USER,
   user
 });
-
-export const userAlreadyLoggedIn = () => ({ type: types.USER_ALREADY_LOGGED_IN });
