@@ -2,7 +2,6 @@ import { VOTE_UP, LOGIN_SUCCESS, QUEUE_REMOVE_TRACK, QUEUE_TRACK } from '../cons
 import { updateUsers } from '../actions/usersActions';
 import { updateQueue, queueEnded } from '../actions/queueActions';
 import { playTrack } from '../actions/playbackActions';
-import { userAlreadyLoggedIn } from '../actions/sessionActions';
 import Config from '../config/app';
 
 import io from 'socket.io-client';
@@ -79,11 +78,6 @@ export default function(store) {
 
   socket.on('update users', data => {
     store.dispatch(updateUsers(data));
-  });
-
-  socket.on('user has already logged in', () => {
-    socket.close();
-    store.dispatch(userAlreadyLoggedIn());
   });
 
   // todo: manage end song, end queue
