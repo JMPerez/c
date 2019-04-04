@@ -3,7 +3,8 @@ import {
   PLAY_TRACK_SUCCESS,
   QUEUE_ENDED,
   MUTE_PLAYBACK,
-  UNMUTE_PLAYBACK
+  UNMUTE_PLAYBACK,
+  UPDATE_NOW_PLAYING
 } from '../constants/ActionTypes';
 
 const initialState = {
@@ -20,6 +21,14 @@ export default (state, action) => {
         position: 0
       };
     case PLAY_TRACK_SUCCESS:
+      return {
+        ...state,
+        track: action.track,
+        user: action.user,
+        position: action.position,
+        startTime: new Date()
+      };
+    case UPDATE_NOW_PLAYING:
       return {
         ...state,
         track: action.track,

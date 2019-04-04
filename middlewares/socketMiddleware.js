@@ -1,7 +1,7 @@
 import { VOTE_UP, LOGIN_SUCCESS, QUEUE_REMOVE_TRACK, QUEUE_TRACK } from '../constants/ActionTypes';
 import { updateUsers } from '../actions/usersActions';
 import { updateQueue, queueEnded } from '../actions/queueActions';
-import { playTrack } from '../actions/playbackActions';
+import { playTrack, updateNowPlaying } from '../actions/playbackActions';
 import Config from '../config/app';
 
 import io from 'socket.io-client';
@@ -78,6 +78,10 @@ export default function(store) {
 
   socket.on('update users', data => {
     store.dispatch(updateUsers(data));
+  });
+
+  socket.on('update now playing', (track, user, position) => {
+    store.dispatch(updateNowPlaying(track, user, position));
   });
 
   // todo: manage end song, end queue
