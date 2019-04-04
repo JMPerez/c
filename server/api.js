@@ -50,19 +50,26 @@ const botUser = new Bot({
   spotifyApi: spotifyApi
 });
 
-let users = [
-  {
-    user: botUser.toJSON()
-  }
-];
+let users = [botUser.toJSON()];
 
 let globalSocket = null;
+
+let globalIo = null;
 
 const queueManager = new QueueManager({
   onPlay: () => {
     const { track, user } = queueManager.getPlayingContext();
-    globalSocket && globalSocket.emit('play track', track, user);
-    globalSocket && globalSocket.broadcast.emit('play track', track, user);
+    // if one user logs in on multiple tabs, just send 'play track' message to one tab,
+    // but need to send 'update now playing' to other tabs
+    users.forEach(u => {
+      u.socketIdArray.forEach((socketId, index) => {
+        if (index === 0) {
+          globalIo.to(socketId).emit('play track', track, user);
+        } else {
+          globalIo.to(socketId).emit('update now playing', track, user);
+        }
+      });
+    });
   },
   onQueueChanged: () => {
     globalSocket && globalSocket.emit('update queue', queueManager.getQueue());
@@ -90,6 +97,8 @@ queueManager.init();
 const exportedApi = io => {
   let api = Router();
 
+  globalIo = io;
+
   api.get('/', (req, res) => {
     res.json({ version });
   });
@@ -103,7 +112,7 @@ const exportedApi = io => {
   });
 
   api.get('/users', (req, res) => {
-    res.json(users.map(u => u.user));
+    res.json(users);
   });
 
   api.get('/me', async (req, res) => {
@@ -151,38 +160,59 @@ const exportedApi = io => {
 
     socket.on('user login', user => {
       // todo: make request server-side to avoid tampering
-      users.push({
-        user: user,
-        socket: socket.id
+      let index = -1;
+      users.forEach((u, i) => {
+        if (u.id === user.id) {
+          index = i;
+        }
       });
-      socket.user = user;
-      socket.emit('update users', users.map(u => u.user));
-      socket.broadcast.emit('update users', users.map(u => u.user));
 
-      // check if user should start playing something
-      const playingContext = queueManager.getPlayingContext();
-      if (playingContext.track !== null) {
-        socket.emit(
-          'play track',
-          playingContext.track,
-          playingContext.user,
-          Date.now() - playingContext.startTimestamp
-        );
+      socket.user = user;
+      if (index !== -1) {
+        // user has already logged in, add socketId into sockets
+        users[index].socketIdArray.push(socket.id);
+      } else {
+        // user hasn't logged in
+        users.push(Object.assign({}, user, { socketIdArray: [socket.id] }));
+        socket.emit('update users', users);
+        socket.broadcast.emit('update users', users);
+
+        // check if user should start playing something
+        const playingContext = queueManager.getPlayingContext();
+        if (playingContext.track !== null) {
+          socket.emit(
+            'play track',
+            playingContext.track,
+            playingContext.user,
+            Date.now() - playingContext.startTimestamp
+          );
+        }
       }
     });
 
     socket.on('disconnect', () => {
       console.log('disconnect ' + socket.id);
-      let index = -1;
+      let userIndex = -1;
+      let socketIdIndex = -1;
       users.forEach((user, i) => {
-        if (user.socket === socket.id) {
-          index = i;
-        }
+        user.socketIdArray.forEach((socketId, j) => {
+          if (socketId === socket.id) {
+            userIndex = i;
+            socketIdIndex = j;
+          }
+        });
       });
-      if (index !== -1) {
-        users.splice(index, 1);
-        socket.emit('update users', users.map(u => u.user));
-        socket.broadcast.emit('update users', users.map(u => u.user));
+
+      if (userIndex !== -1 && socketIdIndex !== -1) {
+        if (users[userIndex].socketIdArray.length > 1) {
+          // remove socketId from socketIdArray
+          users[userIndex].socketIdArray.splice(socketIdIndex, 1);
+        } else {
+          // remove user from users
+          users.splice(userIndex, 1);
+          socket.emit('update users', users.map(u => u.user));
+          socket.broadcast.emit('update users', users.map(u => u.user));
+        }
       }
     });
   });

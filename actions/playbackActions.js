@@ -10,6 +10,12 @@ export const playTrack = (track, user, position) => ({
   user,
   position
 });
+export const updateNowPlaying = (track, user, position) => ({
+  type: types.UPDATE_NOW_PLAYING,
+  track,
+  user,
+  position
+});
 export const playTrackSuccess = (track, user, position) => ({
   type: types.PLAY_TRACK_SUCCESS,
   track,
