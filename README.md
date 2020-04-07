@@ -12,7 +12,7 @@ The server can be run locally and also deployed to Heroku. You will need to regi
 
 3. Create a `.env` file in the root of the project with the following variables;
 
-    - `HOST` _(default is `http://localhost:3000`)_
+    - `HOST`
     - `CLIENT_ID`
     - `CLIENT_SECRET`
 
