@@ -1,3 +1,5 @@
+This is good project!!
+
 # C - A collaborative listening room using Spotify
 
 This project is a site where multiple users can propose songs and vote for them, having them played in a synchronised way through Spotify.
