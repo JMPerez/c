@@ -1,4 +1,5 @@
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const { EnvironmentPlugin } = require('webpack');
 const { ANALYZE } = process.env;
 
 module.exports = {
@@ -12,6 +13,8 @@ module.exports = {
         })
       );
     }
+
+    config.plugins.push(new EnvironmentPlugin(['HOST']));
 
     // For the development version, we'll use React.
     // Because, it supports react hot loading and so on.
