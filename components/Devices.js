@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
+import lang from '../lang/en.json';
 
 import ButtonStyle from './ButtonStyle';
 import ButtonDarkStyle from './ButtonDarkStyle';
@@ -12,7 +12,7 @@ class Devices extends React.PureComponent {
     const { devices, isFetching, fetchAvailableDevices, transferPlaybackToDevice } = this.props;
     return (
       <div style={{ paddingBottom: '10px' }}>
-        <h2><FormattedMessage id="devices.title" /></h2>
+        <h2>{lang["devices.title"]}</h2>
         <style jsx>
           {ButtonStyle}
         </style>
@@ -26,14 +26,14 @@ class Devices extends React.PureComponent {
             fetchAvailableDevices();
           }}
         >
-          <FormattedMessage id="devices.fetch" />
+          {lang['devices.fetch']}
         </button>
         {devices.length === 0
-          ? <p><FormattedMessage id="devices.empty" /></p>
+          ? <p>{lang['devices.empty']}</p>
           : <table>
               <tbody>
                 {devices.map(device => (
-                  <tr>
+                  <tr key={device.id}>
                     <td>
                       {device.is_active
                         ? <strong>Active -&gt;</strong>
@@ -42,7 +42,7 @@ class Devices extends React.PureComponent {
                               transferPlaybackToDevice(device.id);
                             }}
                           >
-                            <FormattedMessage id="devices.transfer" />
+                            {lang["devices.transfer"]}
                           </button>}
                     </td>
                     <td>

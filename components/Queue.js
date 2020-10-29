@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import lang from '../lang/en.json';
 
 import QueueItem from './QueueItem';
 import { queueRemoveTrack } from '../actions/queueActions';
@@ -11,9 +12,9 @@ class Queue extends React.PureComponent {
     const { items, session } = this.props;
     return (
       <div style={{ paddingBottom: '10px' }}>
-        <h2><FormattedMessage id="queue.title" /></h2>
+        <h2>{lang['queue.title']}</h2>
         {items.length === 0
-          ? <p><FormattedMessage id="queue.empty" /></p>
+          ? <p>{lang['queue.empty']}</p>
           : <table className="queue">
               <style jsx>{`
                 .queue {

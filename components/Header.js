@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
 import { login } from '../actions/sessionActions';
 import { mutePlayback, unmutePlayback } from '../actions/playbackActions';
 import ButtonStyle from './ButtonStyle';
 import ButtonDarkStyle from './ButtonDarkStyle';
+import lang from '../lang/en.json';
 
 const linkStyle = {
   lineHeight: '30px',
@@ -33,7 +33,7 @@ const Header = ({ session, muted, mutePlayback, unmutePlayback, login }) => (
       </a>
     </Link>
     <Link href="/about">
-      <a style={linkStyle}><FormattedMessage id="about" /></a>
+      <a style={linkStyle}>{lang["about"]}</a>
     </Link>
     {session.user
       ? <div className="media user-header">
@@ -78,7 +78,7 @@ const Header = ({ session, muted, mutePlayback, unmutePlayback, login }) => (
       : <button className="btn btn--dark" style={{ float: 'right' }} onClick={login}>
           <style jsx>{ButtonStyle}</style>
           <style jsx>{ButtonDarkStyle}</style>
-          <FormattedMessage id="login" />
+          Login
         </button>}
     {session.user
       ? <div className="playback-control">
@@ -100,7 +100,7 @@ const Header = ({ session, muted, mutePlayback, unmutePlayback, login }) => (
               muted ? unmutePlayback() : mutePlayback();
             }}
           >
-            {muted ? 'Unmute' : 'Mute'}
+            {muted ? lang['unmute'] : lang['mute']}
           </button>
         </div>
       : null}

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { injectIntl } from 'react-intl';
 
 import { searchTracks, searchTracksReset } from '../actions/searchActions';
 import { queueTrack } from '../actions/queueActions';
+import lang from '../lang/en.json';
 
 class ResultsList extends Component {
   render() {
@@ -129,7 +129,7 @@ class AddToQueue extends Component {
   };
 
   render() {
-    const placeholder = this.props.intl.formatMessage({id: 'queue.add'});
+    const placeholder = lang['queue.add'];
     const results = this.props.search.results;
     return (
       <div className="add-to-queue" onBlur={this.handleBlur}>
@@ -163,4 +163,4 @@ const mapStateToProps = state => ({
   search: state.search
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(AddToQueue));
+export default connect(mapStateToProps, mapDispatchToProps)(AddToQueue);

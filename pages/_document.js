@@ -1,4 +1,4 @@
-import Document, { Head, Main, NextScript } from 'next/document';
+import Document, { Html, Head, Main, NextScript } from 'next/document';
 import flush from 'styled-jsx/server';
 
 // The document (which is SSR-only) needs to be customized to expose the locale
@@ -13,14 +13,14 @@ export default class IntlDocument extends Document {
 
   render() {
     return (
-      <html>
+      <Html>
         <Head>
           <title>C - Collaborative listening on Spotify</title>
           <meta
             name="description"
             content="A collaborative queue where you propose and vote what's going to play next. Use your Spotify account to log in"
           />
-          <link rel="shortcut icon" href="/static/c-icon-128.png" />
+          <link rel="shortcut icon" href="/c-icon-128.png" />
           <meta name="viewport" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width" />
           <style>{`body { margin: 0 } /* custom! */`}</style>
           <script async src="https://www.googletagmanager.com/gtag/js?id=UA-39254352-3" />
@@ -36,7 +36,7 @@ export default class IntlDocument extends Document {
           <Main />
           <NextScript />
         </body>
-      </html>
+      </Html>
     );
   }
 }

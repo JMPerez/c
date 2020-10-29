@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default ({ index, item, session, onRemoveItem, onVoteUp }) => {
+const QueueItem = ({ index, item, session, onRemoveItem, onVoteUp }) => {
   const voteUp = item.voters && session.user && item.voters.filter(v => v.id === session.user.id).length === 0
     ? <button onClick={onVoteUp}>▲</button>
     : null;
@@ -42,3 +42,5 @@ export default ({ index, item, session, onRemoveItem, onVoteUp }) => {
     </tr>
   );
 };
+
+export default QueueItem;

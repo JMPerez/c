@@ -1,5 +1,6 @@
 import { createStore, compose, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
+import {useMemo} from 'react';
 
 import { reducers } from '../reducers';
 
@@ -10,14 +11,18 @@ import { socketMiddleware } from '../middlewares/socketMiddleware';
 import loggerMiddleware from '../middlewares/loggerMiddleware';
 import socketMiddlewareDefault from '../middlewares/socketMiddleware';
 import searchMiddleware from '../middlewares/searchMiddleware';
-
+import {createWrapper} from 'next-redux-wrapper';
 import { load } from '../actions/sessionActions';
-
+import { composeWithDevTools } from 'redux-devtools-extension'
+import { fetchQueue } from '../actions/queueActions';
+import { fetchUsers } from '../actions/usersActions';
+import { fetchPlayingContext } from '../actions/playbackActions';
+let store;
 export const initStore = (initialState = {}) => {
   const store = createStore(
     reducers(),
     initialState,
-    applyMiddleware(
+    composeWithDevTools(applyMiddleware(
       thunk,
       sessionMiddleware,
       socketMiddleware,
@@ -25,10 +30,13 @@ export const initStore = (initialState = {}) => {
       devicesMiddleware,
       loggerMiddleware,
       searchMiddleware
-    )
+    ))
   );
   socketMiddlewareDefault(store);
   store.dispatch(load());
+  store.dispatch(fetchQueue()),
+  store.dispatch(fetchUsers()),
+  store.dispatch(fetchPlayingContext())
   return store;
 };
 

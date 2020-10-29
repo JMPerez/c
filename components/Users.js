@@ -1,5 +1,4 @@
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
 
 const Users = ({ items }) => {
   return (
@@ -36,7 +35,7 @@ const Users = ({ items }) => {
           text-transform: uppercase;
         }
       `}</style>
-      <h2 className="header-2"><FormattedMessage id="online" /></h2>
+      <h2 className="header-2">Online</h2>
       <ul className="user-list">
         {items.map((i, index) => {
           const userName = i.display_name || i.id;

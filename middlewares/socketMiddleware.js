@@ -60,7 +60,7 @@ export function socketMiddleware(store) {
     return result;
   };
 }
-export default function(store) {
+export default function SocketMiddleware(store) {
   socket = io.connect(Config.HOST);
 
   socket.on('update queue', data => {

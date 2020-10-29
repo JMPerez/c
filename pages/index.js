@@ -1,45 +1,72 @@
 import Link from 'next/link';
-import React from 'react';
+import React, {useEffect} from 'react';
 import withRedux from 'next-redux-wrapper';
 import Layout from '../components/MyLayout.js';
-import { initStore } from '../store/store';
-import { fetchQueue } from '../actions/queueActions';
-import { fetchUsers } from '../actions/usersActions';
-import { fetchPlayingContext } from '../actions/playbackActions';
+import { initializeStore, wrapper } from '../store/store';
+
 import Users from '../components/Users';
 import Queue from '../components/Queue';
 import AddToQueue from '../components/AddToQueue';
 import NowPlaying from '../components/NowPlaying';
 import Devices from '../components/Devices';
-import { FormattedMessage } from 'react-intl';
-import { initializeStore } from '../store/store';
+import { useStore } from '../store/store'
+import { useSelector, shallowEqual } from 'react-redux'
 
-export async function getServerSideProps() {
-  const promises = Promise.all([
-    store.dispatch(fetchQueue()),
-    store.dispatch(fetchUsers()),
-    store.dispatch(fetchPlayingContext())
-  ]);
-
-  return {
-  };
-/*
-  playing: state.playback,
-  queue: state.queue,
-  users: state.users,
-  session: state.session
-*/
+const usePlayback = () => {
+  return useSelector(
+    (state) => ({
+      playback: state.playback,
+    }),
+    shallowEqual
+  )
 }
 
-class Main extends React.Component {
-  render() {
+
+const useUsers = () => {
+  return useSelector(
+    (state) => ({
+      users: state.users,
+    }),
+    shallowEqual
+  )
+}
+
+const useQueue = () => {
+  return useSelector(
+    (state) => ({
+      queue: state.queue,
+    }),
+    shallowEqual
+  )
+}
+
+const useSession = () => {
+  return useSelector(
+    (state) => ({
+      session: state.session,
+    }),
+    shallowEqual
+  )
+}
+
+const Q = () => {
+  const { session } = useSession();
+  const { queue } = useQueue();
+  return <Queue items={queue} session={session} />
+}
+
+const Main = (props) => {
+    const { playback } = usePlayback();
+    const { users } = useUsers();
+    const { session } = useSession();
+    console.log("rendering index", props, {playback}, {users});
     return (
       <Layout>
-        {this.props.playing.track
+        {playback && playback.track
           ? <NowPlaying
-              track={this.props.playing.track}
-              user={this.props.playing.user}
-              position={this.props.playing.position}
+              track={playback.track}
+              user={playback.user}
+              position={playback.position}
             />
           : null}
         <div className="app">
@@ -52,26 +79,17 @@ class Main extends React.Component {
             `}
           </style>
           <div style={{ float: 'left' }}>
-            <Queue items={this.props.queue} session={this.props.session} />
-            {this.props.session.user !== null ? <AddToQueue /> : null}
-            {this.props.session.user !== null ? <Devices /> : null}
+            <Q />
+            {session && session.user !== null ? <AddToQueue /> : null}
+            {session &&session.user !== null ? <Devices /> : null}
           </div>
+          {users ?
           <div style={{ float: 'right', width: '150px' }}>
-            <Users items={this.props.users} />
-          </div>
+            <Users items={users} />
+          </div> : null}
         </div>
       </Layout>
     );
   }
-}
-/*
-const mapStateToProps = state => ({
-  playing: state.playback,
-  queue: state.queue,
-  users: state.users,
-  session: state.session
-});
 
-export default withRedux(initStore, mapStateToProps, null)(Main);
-*/
 export default Main;

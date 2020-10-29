@@ -11,7 +11,7 @@ import {
 
 const SPOTIFY_API_BASE = 'https://api.spotify.com/v1';
 
-export default store => next => action => {
+const DevicesMiddleware = store => next => action => {
   const result = next(action);
   switch (action.type) {
     case FETCH_AVAILABLE_DEVICES: {
@@ -41,7 +41,6 @@ export default store => next => action => {
           device_ids: [action.deviceId]
         })
       })
-        .then(r => r.json())
         .then(r => {
           if (r.error) {
             store.dispatch(transferPlaybackToDeviceError(r.error));
@@ -59,3 +58,5 @@ export default store => next => action => {
 
   return result;
 };
+
+export default DevicesMiddleware;

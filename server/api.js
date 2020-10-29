@@ -108,6 +108,7 @@ const exportedApi = io => {
   });
 
   api.get('/queue', (req, res) => {
+    console.log('requesting queue');
     res.json(queueManager.queue);
   });
 
