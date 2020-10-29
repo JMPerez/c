@@ -11,17 +11,27 @@ import Queue from '../components/Queue';
 import AddToQueue from '../components/AddToQueue';
 import NowPlaying from '../components/NowPlaying';
 import Devices from '../components/Devices';
-import PageWithIntl from '../components/PageWithIntl';
 import { FormattedMessage } from 'react-intl';
+import { initializeStore } from '../store/store';
+
+export async function getServerSideProps() {
+  const promises = Promise.all([
+    store.dispatch(fetchQueue()),
+    store.dispatch(fetchUsers()),
+    store.dispatch(fetchPlayingContext())
+  ]);
+
+  return {
+  };
+/*
+  playing: state.playback,
+  queue: state.queue,
+  users: state.users,
+  session: state.session
+*/
+}
 
 class Main extends React.Component {
-  static getInitialProps({ req, store, isServer }) {
-    return Promise.all([
-      store.dispatch(fetchQueue()),
-      store.dispatch(fetchUsers()),
-      store.dispatch(fetchPlayingContext())
-    ]);
-  }
   render() {
     return (
       <Layout>
@@ -54,7 +64,7 @@ class Main extends React.Component {
     );
   }
 }
-
+/*
 const mapStateToProps = state => ({
   playing: state.playback,
   queue: state.queue,
@@ -62,4 +72,6 @@ const mapStateToProps = state => ({
   session: state.session
 });
 
-export default withRedux(initStore, mapStateToProps, null)(PageWithIntl(Main));
+export default withRedux(initStore, mapStateToProps, null)(Main);
+*/
+export default Main;

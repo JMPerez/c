@@ -1,18 +1,7 @@
 import Layout from '../components/MyLayout.js';
-import withRedux from 'next-redux-wrapper';
-
-import { initStore } from '../store/store';
-import PageWithIntl from '../components/PageWithIntl';
 
 const About = () => (
-  <Layout>
-    <style jsx>
-      {`
-        p {
-          margin: 20px 40px 0;
-        }
-      `}
-    </style>
+  <div>
 
     <p>
       This is a personal project by <a href="https://jmperezperez.com">José M. Pérez</a> that uses{' '}
@@ -30,7 +19,7 @@ const About = () => (
     <p>
       You can see the source code <a href="https://github.com/JMPerez/c">on GitHub</a>.
     </p>
-  </Layout>
+    </div>
 );
 
-export default withRedux(initStore, null, null)(PageWithIntl(About));
+export default About;

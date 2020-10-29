@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-export default ({ items }) => {
+const Users = ({ items }) => {
   return (
     <div>
       <style jsx>{`
@@ -63,3 +63,6 @@ export default ({ items }) => {
     </div>
   );
 };
+
+
+export default Users;

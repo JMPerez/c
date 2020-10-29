@@ -26,7 +26,7 @@ const languages = glob.sync('./lang/*.json').map(f => basename(f, '.json'));
 
 // We need to expose React Intl's locale data on the request for the user's
 // locale. This function will also cache the scripts by lang in memory.
-const localeDataCache = new Map();
+/*const localeDataCache = new Map();
 const getLocaleDataScript = locale => {
   const lang = locale.split('-')[0];
   if (!localeDataCache.has(lang)) {
@@ -35,7 +35,7 @@ const getLocaleDataScript = locale => {
     localeDataCache.set(lang, localeDataScript);
   }
   return localeDataCache.get(lang);
-};
+};*/
 
 // We need to load and expose the translations on the request for the user's
 // locale. These will only be used in production, in dev the `defaultMessage` in
@@ -66,7 +66,7 @@ nextApp.prepare().then(() => {
     const accept = accepts(req);
     const locale = accept.language(/*dev ? ['en'] : */ languages);
     req.locale = locale;
-    req.localeDataScript = getLocaleDataScript(locale);
+    // req.localeDataScript = getLocaleDataScript(locale);
     req.messages = /*dev ? {} :*/ getMessages(locale);
     console.log({
       locale: req.locale,
