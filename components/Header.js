@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { connect } from 'react-redux';
 import { login } from '../actions/sessionActions';
-import { mutePlayback, unmutePlayback } from '../actions/playbackActions';
 import ButtonStyle from './ButtonStyle';
 import ButtonDarkStyle from './ButtonDarkStyle';
 import lang from '../lang/en.json';
@@ -29,7 +28,7 @@ const Header = ({ session, muted, mutePlayback, unmutePlayback, login }) => (
   <div style={headerStyle}>
     <Link href="/">
       <a style={Object.assign({}, linkStyle, mainLinkStyle)}>
-        <img src="/static/c-icon-128.png" height="30" />
+        <img src="/c-icon-128.png" height="30" />
       </a>
     </Link>
     <Link href="/about">
@@ -64,7 +63,7 @@ const Header = ({ session, muted, mutePlayback, unmutePlayback, login }) => (
               className="user-image"
               src={
                 (session.user.images && session.user.images.length && session.user.images[0].url) ||
-                  '/static/user-icon.png'
+                  '/user-icon.png'
               }
               width="30"
               height="30"
@@ -80,30 +79,6 @@ const Header = ({ session, muted, mutePlayback, unmutePlayback, login }) => (
           <style jsx>{ButtonDarkStyle}</style>
           Login
         </button>}
-    {session.user
-      ? <div className="playback-control">
-          <style jsx>
-            {ButtonStyle}
-          </style>
-          <style jsx>
-            {ButtonDarkStyle}
-          </style>
-          <style jsx>{`
-            .playback-control {
-              float: right;
-              width: 200px;
-            }
-          `}</style>
-          <button
-            className="btn btn--dark"
-            onClick={() => {
-              muted ? unmutePlayback() : mutePlayback();
-            }}
-          >
-            {muted ? lang['unmute'] : lang['mute']}
-          </button>
-        </div>
-      : null}
   </div>
 );
 

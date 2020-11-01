@@ -5,7 +5,7 @@ const initialState = {
   user: null
 };
 
-export default (state, action) => {
+const SessionReducer = (state, action) => {
   switch (action.type) {
     case LOAD:
       if (process.browser) {
@@ -35,3 +35,5 @@ export default (state, action) => {
       return state ? state : initialState;
   }
 };
+
+export default SessionReducer;

@@ -4,18 +4,24 @@ import Config from '../config/app';
 import * as types from '../constants/ActionTypes';
 
 // playback
-export const playTrack = (track, user, position) => ({
+export const playTrack = (track, user, position, isUserInitiated) => ({
   type: types.PLAY_TRACK,
   track,
   user,
-  position
+  position,
+  isUserInitiated
 });
+
+export const connect = () => ({ type: types.CONNECT });
+export const disconnect = () => ({ type: types.DISCONNECT });
+
 export const updateNowPlaying = (track, user, position) => ({
   type: types.UPDATE_NOW_PLAYING,
   track,
   user,
   position
 });
+
 export const playTrackSuccess = (track, user, position) => ({
   type: types.PLAY_TRACK_SUCCESS,
   track,
@@ -23,8 +29,13 @@ export const playTrackSuccess = (track, user, position) => ({
   position
 });
 
-export const mutePlayback = () => ({ type: types.MUTE_PLAYBACK });
-export const unmutePlayback = () => ({ type: types.UNMUTE_PLAYBACK });
+export const connectSuccess = () => ({
+  type: types.CONNECT_SUCCESS
+});
+
+export const disconnectSuccess = () => ({
+  type: types.DISCONNECT_SUCCESS
+});
 
 export const fetchPlayingContextSuccess = playingContext => ({
   type: types.FETCH_PLAYING_CONTEXT_SUCCESS,

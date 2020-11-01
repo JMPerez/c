@@ -1,36 +1,35 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { connect, disconnect } from '../actions/playbackActions';
+import {usePlayback} from '../reducers';
+import lang from '../lang/en.json';
+import ButtonStyle from './ButtonStyle';
+import ButtonDarkStyle from './ButtonDarkStyle';
+import { initializeStore } from '../store/store'
 
-class NowPlaying extends React.PureComponent {
-  constructor() {
-    super();
-    this.state = {
-      start: Date.now(),
-      currentPosition: 0
-    };
-    this.timer = null;
-    this.tick = () => {
-      this.setState({
-        currentPosition: Date.now() - this.state.start + (this.props.position || 0)
-      });
-    };
-  }
-  componentWillReceiveProps(props) {
-    if (this.props.position !== props.position || this.props.track !== props.track) {
-      this.setState({
-        start: Date.now(),
-        currentPosition: 0
-      });
+const NowPlaying = (props) =>{
+  const [start, setStart] = useState(Date.now());
+  const [currentPosition, setCurrentPosition] = useState(0);
+  const { playback } = usePlayback();
+  const reduxStore = initializeStore()
+  const { dispatch } = reduxStore
+
+  let timer = null;
+  const tick = () => {
+    setCurrentPosition(Date.now() - start + (currentPosition || 0))
+  };
+
+  useEffect( () => {
+    setStart(Date.now());
+    setCurrentPosition(0);
+    timer = setInterval(tick, 300);
+    return () => {
+    clearInterval(timer);
+
     }
-  }
-  componentDidMount() {
-    this.timer = setInterval(this.tick, 300);
-  }
-  componentWillUnmount() {
-    clearInterval(this.timer);
-  }
-  render() {
-    const percentage = +(this.state.currentPosition * 100 / this.props.track.duration_ms).toFixed(2) + '%';
-    const userName = this.props.user.display_name || this.props.user.id;
+  }, [props.position, props.track]);
+
+    const percentage = +(currentPosition * 100 / props.track.duration_ms).toFixed(2) + '%';
+    const userName = props.user.display_name || props.user.id;
     return (
       <div className="now-playing">
         <style jsx>{`
@@ -49,11 +48,11 @@ class NowPlaying extends React.PureComponent {
           }
           .now-playing__track-name {
             font-size: 2em;
-            padding-top: 1.2em;
+            padding-top: 0.2em;
           }
           .now-playing__artist-name {
             font-size: 1.2em;
-            padding-bottom: 2em;
+            padding-bottom: 1em;
             padding-top: 0.5em;
           }
           .now-playing__user {
@@ -83,22 +82,24 @@ class NowPlaying extends React.PureComponent {
             line-height: 30px;
           }
         `}</style>
+        <style jsx>{ButtonStyle}</style>
+        <style jsx>{ButtonDarkStyle}</style>
         <div className="now-playing__text media">
           <div className="media__img">
-            <img src={this.props.track.album.images[1].url} width="170" height="170" />
+            <img src={props.track.album.images[1].url} width="170" height="170" />
           </div>
           <div className="now-playing__bd media__bd">
             <div className="now-playing__track-name">
-              {this.props.track.name}
+              {props.track.name}
             </div>
             <div className="now-playing__artist-name">
-              {this.props.track.artists.map(a => a.name).join(', ')}
+              {props.track.artists.map(a => a.name).join(', ')}
             </div>
             <div className="media__img">
               <img
                 className="user-image"
                 src={
-                  (this.props.user.images && this.props.user.images.length && this.props.user.images[0].url) ||
+                  (props.user.images && props.user.images.length && props.user.images[0].url) ||
                     '/user-icon.png'
                 }
                 width="30"
@@ -110,6 +111,16 @@ class NowPlaying extends React.PureComponent {
             <div className="user-name media__bd">
               {userName}
             </div>
+            <div>
+              <button
+            className="btn btn--dark"
+            onClick={() => {
+              !playback.isConnectedToPlayback ? dispatch(connect()) : dispatch(disconnect());
+            }}
+          >
+            {!playback.isConnectedToPlayback ? lang['play'] : lang['pause']}
+          </button>
+          </div>
           </div>
         </div>
         <div className="now-playing__progress">
@@ -118,6 +129,5 @@ class NowPlaying extends React.PureComponent {
       </div>
     );
   }
-}
 
 export default NowPlaying;

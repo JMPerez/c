@@ -11,7 +11,6 @@ import { socketMiddleware } from '../middlewares/socketMiddleware';
 import loggerMiddleware from '../middlewares/loggerMiddleware';
 import socketMiddlewareDefault from '../middlewares/socketMiddleware';
 import searchMiddleware from '../middlewares/searchMiddleware';
-import {createWrapper} from 'next-redux-wrapper';
 import { load } from '../actions/sessionActions';
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { fetchQueue } from '../actions/queueActions';

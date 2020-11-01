@@ -10,5 +10,7 @@
   "devices.transfer": "Transfer",
   "devices.empty": "The list of devices is empty",
   "mute": "Mute",
-  "unmute": "Unmute"
+  "unmute": "Unmute",
+  "play": "Play",
+  "pause": "Pause"
 }

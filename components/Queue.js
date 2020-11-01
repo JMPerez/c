@@ -1,8 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
 import lang from '../lang/en.json';
-
 import QueueItem from './QueueItem';
 import { queueRemoveTrack } from '../actions/queueActions';
 import { voteUp } from '../actions/voteActions';

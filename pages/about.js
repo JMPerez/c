@@ -1,7 +1,7 @@
 import Layout from '../components/MyLayout.js';
 
 const About = () => (
-  <div>
+  <Layout>
 
     <p>
       This is a personal project by <a href="https://jmperezperez.com">José M. Pérez</a> that uses{' '}
@@ -19,7 +19,7 @@ const About = () => (
     <p>
       You can see the source code <a href="https://github.com/JMPerez/c">on GitHub</a>.
     </p>
-    </div>
+    </Layout>
 );
 
 export default About;

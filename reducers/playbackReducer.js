@@ -1,9 +1,9 @@
 import {
+  CONNECT_SUCCESS,
+  DISCONNECT_SUCCESS,
   FETCH_PLAYING_CONTEXT_SUCCESS,
   PLAY_TRACK_SUCCESS,
   QUEUE_ENDED,
-  MUTE_PLAYBACK,
-  UNMUTE_PLAYBACK,
   UPDATE_NOW_PLAYING
 } from '../constants/ActionTypes';
 
@@ -11,7 +11,7 @@ const initialState = {
   muted: false
 };
 
-export default (state, action) => {
+const PlaybackReducer = (state, action) => {
   switch (action.type) {
     case FETCH_PLAYING_CONTEXT_SUCCESS:
       return {
@@ -26,7 +26,15 @@ export default (state, action) => {
         track: action.track,
         user: action.user,
         position: action.position,
-        startTime: new Date()
+        startTime: new Date(),
+        isPlaying: true,
+      };
+    case CONNECT_SUCCESS:
+      return { ...state, isConnectedToPlayback: true };
+    case DISCONNECT_SUCCESS:
+      return {
+        ...state,
+        isConnectedToPlayback: false
       };
     case UPDATE_NOW_PLAYING:
       return {
@@ -39,11 +47,10 @@ export default (state, action) => {
     case QUEUE_ENDED: {
       return initialState;
     }
-    case MUTE_PLAYBACK:
-      return { ...state, muted: true };
-    case UNMUTE_PLAYBACK:
-      return { ...state, muted: false };
+
     default:
       return state ? state : initialState;
   }
 };
+
+export default PlaybackReducer;
