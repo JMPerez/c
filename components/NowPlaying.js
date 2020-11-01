@@ -81,6 +81,16 @@ const NowPlaying = (props) =>{
           .user-name {
             line-height: 30px;
           }
+          .btn--play {
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            padding: 3px 25px;
+            font-size: 1.1em;
+          }
+          .owner {
+            padding-bottom: 3px;
+          }
         `}</style>
         <style jsx>{ButtonStyle}</style>
         <style jsx>{ButtonDarkStyle}</style>
@@ -95,25 +105,27 @@ const NowPlaying = (props) =>{
             <div className="now-playing__artist-name">
               {props.track.artists.map(a => a.name).join(', ')}
             </div>
-            <div className="media__img">
-              <img
-                className="user-image"
-                src={
-                  (props.user.images && props.user.images.length && props.user.images[0].url) ||
-                    '/user-icon.png'
-                }
-                width="30"
-                height="30"
-                alt={userName}
-                title={userName}
-              />
-            </div>
-            <div className="user-name media__bd">
-              {userName}
+            <div className="media owner">
+              <div className="media__img">
+                <img
+                  className="user-image"
+                  src={
+                    (props.user.images && props.user.images.length && props.user.images[0].url) ||
+                      '/user-icon.png'
+                  }
+                  width="30"
+                  height="30"
+                  alt={userName}
+                  title={userName}
+                />
+              </div>
+              <div className="user-name media__bd">
+                {userName}
+              </div>
             </div>
             <div>
               <button
-            className="btn btn--dark"
+            className="btn btn--dark btn--play"
             onClick={() => {
               !playback.isConnectedToPlayback ? dispatch(connect()) : dispatch(disconnect());
             }}
