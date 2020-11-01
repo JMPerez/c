@@ -11,6 +11,7 @@
     "analyze": "cross-env ANALYZE=1 next build",
     "precommit": "lint-staged"
   },
+  "cacheDirectories": [".next/cache"],
   "lint-staged": {
     "*.js": [
       "prettier --write --single-quote --print-width 120",
