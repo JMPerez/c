@@ -52,7 +52,7 @@ const NowPlaying = (props) =>{
           }
           .now-playing__artist-name {
             font-size: 1.2em;
-            padding-bottom: 1em;
+            padding-bottom: 0.5em;
             padding-top: 0.5em;
           }
           .now-playing__user {
@@ -89,7 +89,7 @@ const NowPlaying = (props) =>{
             font-size: 1.1em;
           }
           .owner {
-            padding-bottom: 3px;
+            padding-bottom: 0.7em;
           }
         `}</style>
         <style jsx>{ButtonStyle}</style>
