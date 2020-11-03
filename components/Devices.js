@@ -10,6 +10,24 @@ import {
 } from "../actions/devicesActions";
 import { getIsFetchingDevices } from "../reducers";
 import { getDevices } from "../reducers";
+
+const deviceTypeToImage = function (deviceType) {
+  switch (deviceType) {
+    case "Computer":
+      return "/icon-desktop.svg";
+    case "Mobile":
+      return "/icon-mobile.svg";
+    case "Tablet":
+      return "/icon-tablet.svg";
+    case "Speaker":
+      return "/icon-speaker.svg";
+    case "Car":
+      return "/icon-car.svg";
+    default:
+      return "/icon-other.svg";
+  }
+};
+
 class Devices extends React.PureComponent {
   render() {
     const {
@@ -23,6 +41,19 @@ class Devices extends React.PureComponent {
         <h2>{lang["devices.title"]}</h2>
         <style jsx>{ButtonStyle}</style>
         <style jsx>{ButtonDarkStyle}</style>
+        <style jsx>
+          {`
+            td {
+              padding-left: 0.5rem;
+              padding-right: 0.5rem;
+              padding-top: 0.25rem;
+              padding-bottom: 0.25rem;
+            }
+            tr {
+              border: 1px solid #e5e7eb;
+            }
+          `}
+        </style>
         <button
           className="btn btn--dark"
           disabled={isFetching}
@@ -40,6 +71,14 @@ class Devices extends React.PureComponent {
               {devices.map((device) => (
                 <tr key={device.id}>
                   <td>
+                    <img
+                      src={deviceTypeToImage(device.type)}
+                      width="32"
+                      height="32"
+                    />
+                  </td>
+                  <td>{device.name}</td>
+                  <td>
                     {device.is_active ? (
                       <strong>Active -&gt;</strong>
                     ) : (
@@ -52,9 +91,6 @@ class Devices extends React.PureComponent {
                       </button>
                     )}
                   </td>
-                  <td>{device.name}</td>
-                  <td>{device.type}</td>
-                  <td>{device.volume}</td>
                 </tr>
               ))}
             </tbody>
