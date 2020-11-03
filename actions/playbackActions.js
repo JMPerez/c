@@ -46,3 +46,7 @@ export const fetchPlayingContext = () => dispatch =>
   fetch(`${Config.HOST}/api/now-playing`)
     .then(res => res.json())
     .then(res => dispatch(fetchPlayingContextSuccess(res)));
+
+export const initializeLocalPlayer = () => ({
+  type: types.INITIALIZE_LOCAL_PLAYER
+});

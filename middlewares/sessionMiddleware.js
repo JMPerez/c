@@ -2,6 +2,7 @@ import fetch from 'isomorphic-unfetch';
 
 import { LOAD, LOGIN } from '../constants/ActionTypes';
 import { loginSuccess, updateCurrentUser, updateTokenSuccess } from '../actions/sessionActions';
+import { initializeLocalPlayer } from '../actions/playbackActions';
 
 import * as Config from '../config/app';
 
@@ -56,12 +57,14 @@ export default store => next => action => {
             })
             .then(() => {
               store.dispatch(loginSuccess());
+              store.dispatch(initializeLocalPlayer());
             });
         }
       } else {
         console.log('sessionMiddleware > no need to update access token');
         store.dispatch(getCurrentUser()).then(() => {
           store.dispatch(loginSuccess());
+          store.dispatch(initializeLocalPlayer());
         });
       }
       break;
@@ -91,7 +94,10 @@ export default store => next => action => {
               localStorage.setItem('accessToken', accessToken);
               localStorage.setItem('expiresIn', Date.now() + expiresIn * 1000);
               store.dispatch(updateTokenSuccess(accessToken));
-              store.dispatch(getCurrentUser()).then(() => store.dispatch(loginSuccess()));
+              store.dispatch(getCurrentUser()).then(() => {
+                store.dispatch(initializeLocalPlayer());
+                store.dispatch(loginSuccess());
+              });
             }
           }
         } catch (e) {
@@ -101,7 +107,14 @@ export default store => next => action => {
       };
       window.addEventListener('message', messageFn, false);
 
-      const url = getLoginURL(['user-read-playback-state', 'user-modify-playback-state']);
+      const url = getLoginURL([
+        'user-read-playback-state',
+        'user-modify-playback-state',
+        "streaming", /* needed for playback, see https://developer.spotify.com/documentation/web-playback-sdk/quick-start/ */
+        "user-read-email", /* needed for playback, see https://developer.spotify.com/documentation/web-playback-sdk/quick-start/ */
+        "user-read-private" /* needed for playback, see https://developer.spotify.com/documentation/web-playback-sdk/quick-start/ */
+     ]);
+     console.log({url})
       window.open(
         url,
         'Spotify',

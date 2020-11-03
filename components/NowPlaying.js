@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect, disconnect } from '../actions/playbackActions';
-import {usePlayback} from '../reducers';
+import { login } from '../actions/sessionActions';
+import {usePlayback, useSession} from '../reducers';
 import lang from '../lang/en.json';
 import ButtonStyle from './ButtonStyle';
 import ButtonDarkStyle from './ButtonDarkStyle';
@@ -10,6 +11,7 @@ const NowPlaying = (props) =>{
   const [start, setStart] = useState(Date.now());
   const [currentPosition, setCurrentPosition] = useState(0);
   const { playback } = usePlayback();
+  const { session } = useSession();
   const reduxStore = initializeStore()
   const { dispatch } = reduxStore
 
@@ -127,7 +129,15 @@ const NowPlaying = (props) =>{
               <button
             className="btn btn--dark btn--play"
             onClick={() => {
-              !playback.isConnectedToPlayback ? dispatch(connect()) : dispatch(disconnect());
+              if (session.user === null) {
+                dispatch(login()); // TODO: Start playback once logged in
+              } else {
+                if (playback.isConnectedToPlayback) {
+                  dispatch(disconnect()); 
+                } else {
+                  dispatch(connect());
+                }
+              }
             }}
           >
             {!playback.isConnectedToPlayback ? lang['play'] : lang['pause']}
