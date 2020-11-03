@@ -1,14 +1,19 @@
-import { VOTE_UP, LOGIN_SUCCESS, QUEUE_REMOVE_TRACK, QUEUE_TRACK } from '../constants/ActionTypes';
-import { updateUsers } from '../actions/usersActions';
-import { updateQueue, queueEnded } from '../actions/queueActions';
-import { playTrack, updateNowPlaying } from '../actions/playbackActions';
-import Config from '../config/app';
+import {
+  VOTE_UP,
+  LOGIN_SUCCESS,
+  QUEUE_REMOVE_TRACK,
+  QUEUE_TRACK,
+} from "../constants/ActionTypes";
+import { updateUsers } from "../actions/usersActions";
+import { updateQueue, queueEnded } from "../actions/queueActions";
+import { playTrack, updateNowPlaying } from "../actions/playbackActions";
+import Config from "../config/app";
 
-import io from 'socket.io-client';
+import io from "socket.io-client";
 
 var socket = null;
 
-const getIdFromTrackString = (trackString = '') => {
+const getIdFromTrackString = (trackString = "") => {
   let matches = trackString.match(/^https:\/\/open\.spotify\.com\/track\/(.*)/);
   if (matches) {
     return matches[1];
@@ -28,7 +33,7 @@ const getIdFromTrackString = (trackString = '') => {
 };
 
 export function socketMiddleware(store) {
-  return next => action => {
+  return (next) => (action) => {
     const result = next(action);
 
     if (socket) {
@@ -38,19 +43,19 @@ export function socketMiddleware(store) {
           if (trackId === null) {
             trackId = action.id;
           }
-          socket.emit('queue track', trackId);
+          socket.emit("queue track", trackId);
           break;
         }
         case QUEUE_REMOVE_TRACK: {
-          socket.emit('remove track', action.id);
+          socket.emit("remove track", action.id);
           break;
         }
         case LOGIN_SUCCESS:
           const user = store.getState().session.user;
-          socket.emit('user login', user);
+          socket.emit("user login", user);
           break;
         case VOTE_UP:
-          socket.emit('vote up', action.id);
+          socket.emit("vote up", action.id);
           break;
         default:
           break;
@@ -63,24 +68,24 @@ export function socketMiddleware(store) {
 export default function SocketMiddleware(store) {
   socket = io.connect(Config.HOST);
 
-  socket.on('update queue', data => {
+  socket.on("update queue", (data) => {
     store.dispatch(updateQueue(data));
   });
 
-  socket.on('queue ended', () => {
+  socket.on("queue ended", () => {
     store.dispatch(queueEnded());
   });
 
-  socket.on('play track', (track, user, position) => {
+  socket.on("play track", (track, user, position) => {
     // we should also set repeat to false!
     store.dispatch(playTrack(track, user, position));
   });
 
-  socket.on('update users', data => {
+  socket.on("update users", (data) => {
     store.dispatch(updateUsers(data));
   });
 
-  socket.on('update now playing', (track, user, position) => {
+  socket.on("update now playing", (track, user, position) => {
     store.dispatch(updateNowPlaying(track, user, position));
   });
 

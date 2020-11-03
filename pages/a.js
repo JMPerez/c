@@ -1,2 +1,2 @@
-const A = () => (<div>HOLA</div>);
+const A = () => <div>HOLA</div>;
 export default A;

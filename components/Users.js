@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const Users = ({ items }) => {
   return (
@@ -44,24 +44,24 @@ const Users = ({ items }) => {
               <div className="media__img">
                 <img
                   className="user-image"
-                  src={(i.images && i.images.length && i.images[0].url) || '/static/user-icon.png'}
+                  src={
+                    (i.images && i.images.length && i.images[0].url) ||
+                    "/static/user-icon.png"
+                  }
                   width="30"
                   height="30"
                   alt={userName}
                   title={userName}
                 />
               </div>
-              <div className="user-name media__bd">
-                {userName}
-              </div>
+              <div className="user-name media__bd">{userName}</div>
             </li>
           );
         })}
       </ul>
-      <div style={{ clear: 'both' }} />
+      <div style={{ clear: "both" }} />
     </div>
   );
 };
-
 
 export default Users;

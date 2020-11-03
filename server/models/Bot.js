@@ -1,18 +1,22 @@
 class Bot {
   constructor(options) {
-    this.image = options.image || '/robot-icon.png';
-    this.id = options.id || 'Robot';
+    this.image = options.image || "/robot-icon.png";
+    this.id = options.id || "Robot";
     this.recommendations = {};
   }
 
   async generateRecommendation(items, getToken, spotifyApi) {
-    const trackIds = items.filter(i => i.user.type === 'user').map(i => i.track.id);
+    const trackIds = items
+      .filter((i) => i.user.type === "user")
+      .map((i) => i.track.id);
 
     if (trackIds.length) {
-      const key = trackIds.join('-');
+      const key = trackIds.join("-");
       if (!(key in this.recommendations)) {
         await getToken();
-        const res = await spotifyApi.getRecommendations({ seed_tracks: trackIds });
+        const res = await spotifyApi.getRecommendations({
+          seed_tracks: trackIds,
+        });
         this.recommendations[key] = res.body.tracks;
       }
       if (this.recommendations[key].length) {
@@ -29,8 +33,8 @@ class Bot {
     return {
       id: this.id,
       images: [{ url: this.image }],
-      type: 'robot',
-      socketIdArray: [] // todo: always empty, add this attribute in order to be compatible with other true users
+      type: "robot",
+      socketIdArray: [], // todo: always empty, add this attribute in order to be compatible with other true users
     };
   }
 }

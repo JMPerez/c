@@ -1,11 +1,11 @@
-const fs = require('fs');
+const fs = require("fs");
 
 class QueueManager {
   constructor(options) {
     this.playingContext = {
       track: null,
       user: null,
-      startTimestamp: null
+      startTimestamp: null,
     };
     this.queue = [];
     this.onQueueChanged = options.onQueueChanged;
@@ -50,7 +50,7 @@ class QueueManager {
   }
 
   removeId(user, id) {
-    const index = this.queue.findIndex(item => item.id === id);
+    const index = this.queue.findIndex((item) => item.id === id);
     if (index !== -1 && this.queue[index].user.id === user.id) {
       this.queue.splice(index, 1);
       this.handleQueueChanged();
@@ -62,9 +62,9 @@ class QueueManager {
   }
 
   play() {
-    console.log('api.js > play');
+    console.log("api.js > play");
     if (this.queue.length > 0) {
-      console.log('api.js > play has queue');
+      console.log("api.js > play has queue");
       // something to play!
       const queueItem = this.queue.shift();
       this.handleQueueChanged();
@@ -72,11 +72,11 @@ class QueueManager {
         track: queueItem.track,
         user: queueItem.user,
         startTimestamp: Date.now(),
-        voters: queueItem.voters
+        voters: queueItem.voters,
       };
       this.playedHistory.push({
         track: queueItem.track,
-        user: queueItem.user
+        user: queueItem.user,
       });
       setTimeout(() => {
         this.play();
@@ -87,7 +87,7 @@ class QueueManager {
         track: null,
         user: null,
         startTimestamp: null,
-        voters: []
+        voters: [],
       };
 
       this.onQueueEnded();
@@ -95,11 +95,11 @@ class QueueManager {
   }
 
   voteUpId(user, id) {
-    const index = this.queue.findIndex(item => item.id === id);
+    const index = this.queue.findIndex((item) => item.id === id);
     if (index === -1) return false;
     const voters = this.queue[index].voters;
     if (voters) {
-      const userVotes = voters.filter(v => v.id === user.id);
+      const userVotes = voters.filter((v) => v.id === user.id);
       if (userVotes.length === 0) {
         this.queue[index].voters.push(user);
         this.handleQueueChanged();
@@ -110,18 +110,18 @@ class QueueManager {
 
   save() {
     fs.writeFileSync(
-      './queue.json',
+      "./queue.json",
       JSON.stringify({
         playingContext: this.playingContext,
-        queue: this.queue
+        queue: this.queue,
       }),
-      ''
+      ""
     );
   }
 
   read() {
     try {
-      const data = JSON.parse(fs.readFileSync('./queue.json'));
+      const data = JSON.parse(fs.readFileSync("./queue.json"));
       this.playingContext = data.playingContext;
       this.queue = data.queue;
     } catch (e) {

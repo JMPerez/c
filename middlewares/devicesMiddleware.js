@@ -1,28 +1,31 @@
-import fetch from 'isomorphic-unfetch';
+import fetch from "isomorphic-unfetch";
 
-import { FETCH_AVAILABLE_DEVICES, TRANSFER_PLAYBACK_TO_DEVICE } from '../constants/ActionTypes';
+import {
+  FETCH_AVAILABLE_DEVICES,
+  TRANSFER_PLAYBACK_TO_DEVICE,
+} from "../constants/ActionTypes";
 import {
   fetchAvailableDevices,
   fetchAvailableDevicesSuccess,
   fetchAvailableDevicesError,
   transferPlaybackToDeviceSuccess,
-  transferPlaybackToDeviceError
-} from '../actions/devicesActions';
+  transferPlaybackToDeviceError,
+} from "../actions/devicesActions";
 
-const SPOTIFY_API_BASE = 'https://api.spotify.com/v1';
+const SPOTIFY_API_BASE = "https://api.spotify.com/v1";
 
-const DevicesMiddleware = store => next => action => {
+const DevicesMiddleware = (store) => (next) => (action) => {
   const result = next(action);
   switch (action.type) {
     case FETCH_AVAILABLE_DEVICES: {
       fetch(`${SPOTIFY_API_BASE}/me/player/devices`, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          Authorization: `Bearer ${store.getState().session.access_token}`
-        }
+          Authorization: `Bearer ${store.getState().session.access_token}`,
+        },
       })
-        .then(r => r.json())
-        .then(r => {
+        .then((r) => r.json())
+        .then((r) => {
           if (r.error) {
             store.dispatch(fetchAvailableDevicesError(r.error));
           } else {
@@ -33,22 +36,21 @@ const DevicesMiddleware = store => next => action => {
     }
     case TRANSFER_PLAYBACK_TO_DEVICE: {
       fetch(`${SPOTIFY_API_BASE}/me/player`, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          Authorization: `Bearer ${store.getState().session.access_token}`
+          Authorization: `Bearer ${store.getState().session.access_token}`,
         },
         body: JSON.stringify({
-          device_ids: [action.deviceId]
-        })
-      })
-        .then(r => {
-          if (r.error) {
-            store.dispatch(transferPlaybackToDeviceError(r.error));
-          } else {
-            store.dispatch(transferPlaybackToDeviceSuccess());
-            store.dispatch(fetchAvailableDevices());
-          }
-        });
+          device_ids: [action.deviceId],
+        }),
+      }).then((r) => {
+        if (r.error) {
+          store.dispatch(transferPlaybackToDeviceError(r.error));
+        } else {
+          store.dispatch(transferPlaybackToDeviceSuccess());
+          store.dispatch(fetchAvailableDevices());
+        }
+      });
       break;
     }
 

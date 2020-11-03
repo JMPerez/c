@@ -1,10 +1,10 @@
-import * as types from '../constants/ActionTypes';
+import * as types from "../constants/ActionTypes";
 
-export const voteUp = id => ({
+export const voteUp = (id) => ({
   type: types.VOTE_UP,
-  id
+  id,
 });
 
 export const voteUpSuccess = () => ({
-  type: types.VOTE_UP_SUCCESS
+  type: types.VOTE_UP_SUCCESS,
 });

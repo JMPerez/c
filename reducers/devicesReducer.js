@@ -1,12 +1,12 @@
 import {
   FETCH_AVAILABLE_DEVICES,
   FETCH_AVAILABLE_DEVICES_ERROR,
-  FETCH_AVAILABLE_DEVICES_SUCCESS
-} from '../constants/ActionTypes';
+  FETCH_AVAILABLE_DEVICES_SUCCESS,
+} from "../constants/ActionTypes";
 
 const initialState = {
   isFetching: false,
-  data: []
+  data: [],
 };
 
 export default (state, action) => {
@@ -14,13 +14,13 @@ export default (state, action) => {
     case FETCH_AVAILABLE_DEVICES:
       return {
         ...state,
-        isFetching: true
+        isFetching: true,
       };
     case FETCH_AVAILABLE_DEVICES_SUCCESS:
       return {
         ...state,
         isFetching: false,
-        data: action.list
+        data: action.list,
       };
     case FETCH_AVAILABLE_DEVICES_ERROR:
       return initialState;
@@ -29,10 +29,10 @@ export default (state, action) => {
   }
 };
 
-export const getIsFetching = state => {
+export const getIsFetching = (state) => {
   return state.isFetching;
 };
 
-export const getDevices = state => {
+export const getDevices = (state) => {
   return state.data;
 };

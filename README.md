@@ -12,18 +12,17 @@ The server can be run locally and also deployed to Heroku. You will need to regi
 
 3. Create a `.env` file in the root of the project with the following variables;
 
-    - `HOST`
-    - `CLIENT_ID`
-    - `CLIENT_SECRET`
+   - `HOST`
+   - `CLIENT_ID`
+   - `CLIENT_SECRET`
 
 Example:
+
 ```
 HOST=http://localhost:3000
 CLIENT_ID=<your_client_id>
 CLIENT_SECRET=<your_client_secret>
 ```
-
-
 
 ## Dependencies
 
@@ -35,15 +34,15 @@ During development, run `npm run dev`.
 
 When running on production, run `npm run build && npm run start`.
 
-
 ### Run with Docker
 
 To run this app in Docker use the following steps
 
 1. Build the image run:
-`docker build -t c .`
+   `docker build -t c .`
 
 2. Run the image:
+
 ```
 docker run -p 3000:3000 \
     -e HOST=http://localhost:3000 \

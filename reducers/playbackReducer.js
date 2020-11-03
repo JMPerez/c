@@ -4,11 +4,11 @@ import {
   FETCH_PLAYING_CONTEXT_SUCCESS,
   PLAY_TRACK_SUCCESS,
   QUEUE_ENDED,
-  UPDATE_NOW_PLAYING
-} from '../constants/ActionTypes';
+  UPDATE_NOW_PLAYING,
+} from "../constants/ActionTypes";
 
 const initialState = {
-  muted: false
+  muted: false,
 };
 
 const PlaybackReducer = (state, action) => {
@@ -18,7 +18,7 @@ const PlaybackReducer = (state, action) => {
         ...state,
         track: action.playingContext.track,
         user: action.playingContext.user,
-        position: 0
+        position: 0,
       };
     case PLAY_TRACK_SUCCESS:
       return {
@@ -34,7 +34,7 @@ const PlaybackReducer = (state, action) => {
     case DISCONNECT_SUCCESS:
       return {
         ...state,
-        isConnectedToPlayback: false
+        isConnectedToPlayback: false,
       };
     case UPDATE_NOW_PLAYING:
       return {
@@ -42,7 +42,7 @@ const PlaybackReducer = (state, action) => {
         track: action.track,
         user: action.user,
         position: action.position,
-        startTime: new Date()
+        startTime: new Date(),
       };
     case QUEUE_ENDED: {
       return initialState;

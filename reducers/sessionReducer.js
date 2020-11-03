@@ -1,21 +1,26 @@
-import { LOAD, LOGIN_SUCCESS, UPDATE_TOKEN_SUCCESS, UPDATE_CURRENT_USER } from '../constants/ActionTypes';
+import {
+  LOAD,
+  LOGIN_SUCCESS,
+  UPDATE_TOKEN_SUCCESS,
+  UPDATE_CURRENT_USER,
+} from "../constants/ActionTypes";
 
 const initialState = {
   refresh_token: null, //'localStorage' in window && localStorage.getItem('refreshToken'),
-  user: null
+  user: null,
 };
 
 const SessionReducer = (state, action) => {
   switch (action.type) {
     case LOAD:
       if (process.browser) {
-        const refreshToken = localStorage.getItem('v2_refreshToken');
-        const accessToken = localStorage.getItem('v2_accessToken');
-        const expiresIn = localStorage.getItem('v2_expiresIn');
+        const refreshToken = localStorage.getItem("v2_refreshToken");
+        const accessToken = localStorage.getItem("v2_accessToken");
+        const expiresIn = localStorage.getItem("v2_expiresIn");
         return Object.assign({}, state, {
           access_token: accessToken,
           refresh_token: refreshToken,
-          expires_in: expiresIn ? +expiresIn : null
+          expires_in: expiresIn ? +expiresIn : null,
         });
       } else {
         return state;
@@ -25,7 +30,7 @@ const SessionReducer = (state, action) => {
     case LOGIN_SUCCESS:
       if (action.refresh_token) {
         return Object.assign({}, state, {
-          refresh_token: action.refresh_token
+          refresh_token: action.refresh_token,
         });
       }
       return state;

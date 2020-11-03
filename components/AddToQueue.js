@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { Component } from "react";
+import { connect } from "react-redux";
 
-import { searchTracks, searchTracksReset } from '../actions/searchActions';
-import { queueTrack } from '../actions/queueActions';
-import lang from '../lang/en.json';
+import { searchTracks, searchTracksReset } from "../actions/searchActions";
+import { queueTrack } from "../actions/queueActions";
+import lang from "../lang/en.json";
 
 class ResultsList extends Component {
   render() {
@@ -23,15 +23,15 @@ class ResultsList extends Component {
           .add-to-queue__search-results-item--focused {
             background-color: #eee;
           }
-          .container{
+          .container {
             display: flex;
           }
-          .album-img{
-              width: 64;
-              padding-right: 1em;
+          .album-img {
+            width: 64;
+            padding-right: 1em;
           }
-          .flex-item{
-              flex-grow: 1;
+          .flex-item {
+            flex-grow: 1;
           }
 
           .song-name {
@@ -42,12 +42,17 @@ class ResultsList extends Component {
         {results.map((r, index) => {
           const isFocused = focus === index;
           const className =
-            'add-to-queue__search-results-item' + (isFocused ? ' add-to-queue__search-results-item--focused' : '');
+            "add-to-queue__search-results-item" +
+            (isFocused ? " add-to-queue__search-results-item--focused" : "");
           return (
-            <li key={r.id} className={className} onClick={() => this.props.onSelect(r.id)}>
+            <li
+              key={r.id}
+              className={className}
+              onClick={() => this.props.onSelect(r.id)}
+            >
               <div className="container">
                 <div className="album-img">
-                  <img src={r.album.images[2].url}/>
+                  <img src={r.album.images[2].url} />
                 </div>
                 <div className="flex-item">
                   <div className="song-name">{r.name}</div>
@@ -64,14 +69,14 @@ class ResultsList extends Component {
 
 class AddToQueue extends Component {
   state = {
-    text: this.props.text || '',
-    focus: -1
+    text: this.props.text || "",
+    focus: -1,
   };
 
-  handleChange = e => {
+  handleChange = (e) => {
     const text = e.target.value;
     this.setState({ text: text });
-    if (text !== '') {
+    if (text !== "") {
       this.props.searchTracks(text);
     } else {
       this.setState({ focus: -1 });
@@ -79,26 +84,26 @@ class AddToQueue extends Component {
     }
   };
 
-  handleSelectElement = id => {
-    this.setState({ text: '' });
+  handleSelectElement = (id) => {
+    this.setState({ text: "" });
     this.props.queueTrack(id);
     this.props.searchTracksReset();
   };
 
-  handleBlur = e => {
+  handleBlur = (e) => {
     // todo: this happens before the item from the list is selected, hiding the
     // list of results. We need to do this in a different way.
     /*    this.setState({ focus: -1 });
     this.props.searchTracksReset(); */
   };
 
-  handleFocus = e => {
-    if (e.target.value !== '') {
+  handleFocus = (e) => {
+    if (e.target.value !== "") {
       this.props.searchTracks(e.target.value);
     }
   };
 
-  handleKeyDown = e => {
+  handleKeyDown = (e) => {
     switch (e.keyCode) {
       case 38: // up
         this.setState({ focus: this.state.focus - 1 });
@@ -119,7 +124,7 @@ class AddToQueue extends Component {
           }
         }
         if (correct) {
-          this.setState({ text: '' });
+          this.setState({ text: "" });
           this.props.searchTracksReset();
           this.setState({ focus: -1 });
         }
@@ -129,7 +134,7 @@ class AddToQueue extends Component {
   };
 
   render() {
-    const placeholder = lang['queue.add'];
+    const placeholder = lang["queue.add"];
     const results = this.props.search.results;
     return (
       <div className="add-to-queue" onBlur={this.handleBlur}>
@@ -147,20 +152,26 @@ class AddToQueue extends Component {
           onKeyDown={this.handleKeyDown}
           onFocus={this.handleFocus}
         />
-        {results && <ResultsList results={results} onSelect={this.handleSelectElement} focus={this.state.focus} />}
+        {results && (
+          <ResultsList
+            results={results}
+            onSelect={this.handleSelectElement}
+            focus={this.state.focus}
+          />
+        )}
       </div>
     );
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  queueTrack: text => dispatch(queueTrack(text)),
-  searchTracks: query => dispatch(searchTracks(query)),
-  searchTracksReset: () => dispatch(searchTracksReset())
+const mapDispatchToProps = (dispatch) => ({
+  queueTrack: (text) => dispatch(queueTrack(text)),
+  searchTracks: (query) => dispatch(searchTracks(query)),
+  searchTracksReset: () => dispatch(searchTracksReset()),
 });
 
-const mapStateToProps = state => ({
-  search: state.search
+const mapStateToProps = (state) => ({
+  search: state.search,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddToQueue);

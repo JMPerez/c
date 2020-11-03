@@ -1,4 +1,8 @@
-import { SEARCH_TRACKS, SEARCH_TRACKS_SUCCESS, SEARCH_TRACKS_RESET } from '../constants/ActionTypes';
+import {
+  SEARCH_TRACKS,
+  SEARCH_TRACKS_SUCCESS,
+  SEARCH_TRACKS_RESET,
+} from "../constants/ActionTypes";
 
 const initialState = {};
 
@@ -10,7 +14,7 @@ export default (state, action) => {
       if (state.query === action.query) {
         return {
           query: action.query,
-          results: action.results
+          results: action.results,
         };
       } else {
         return state;

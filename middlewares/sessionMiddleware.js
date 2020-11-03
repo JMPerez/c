@@ -1,36 +1,40 @@
-import fetch from 'isomorphic-unfetch';
+import fetch from "isomorphic-unfetch";
 
-import { LOAD, LOGIN } from '../constants/ActionTypes';
-import { loginSuccess, updateCurrentUser, updateTokenSuccess } from '../actions/sessionActions';
-import { initializeLocalPlayer } from '../actions/playbackActions';
+import { LOAD, LOGIN } from "../constants/ActionTypes";
+import {
+  loginSuccess,
+  updateCurrentUser,
+  updateTokenSuccess,
+} from "../actions/sessionActions";
+import { initializeLocalPlayer } from "../actions/playbackActions";
 
-import * as Config from '../config/app';
+import * as Config from "../config/app";
 
-const SPOTIFY_API_BASE = 'https://api.spotify.com/v1';
+const SPOTIFY_API_BASE = "https://api.spotify.com/v1";
 
 const getCurrentUser = () => (dispatch, getState) =>
   fetch(`${SPOTIFY_API_BASE}/me`, {
     headers: {
-      Authorization: 'Bearer ' + getState().session.access_token
-    }
+      Authorization: "Bearer " + getState().session.access_token,
+    },
   })
-    .then(res => res.json())
-    .then(res => {
+    .then((res) => res.json())
+    .then((res) => {
       dispatch(updateCurrentUser(res));
     });
 
 const updateToken = () => (dispatch, getState) => {
   return fetch(`${Config.HOST}/auth/token`, {
-    method: 'POST',
+    method: "POST",
     body: JSON.stringify({
-      refresh_token: getState().session.refresh_token
+      refresh_token: getState().session.refresh_token,
     }),
     headers: new Headers({
-      'Content-Type': 'application/json'
-    })
+      "Content-Type": "application/json",
+    }),
   })
-    .then(res => res.json())
-    .then(res => {
+    .then((res) => res.json())
+    .then((res) => {
       console.log(res);
       dispatch(updateTokenSuccess(res.access_token));
     });
@@ -38,18 +42,19 @@ const updateToken = () => (dispatch, getState) => {
 
 // todo: set a timer, both client-side and server-side
 
-export default store => next => action => {
+export default (store) => (next) => (action) => {
   const result = next(action);
   switch (action.type) {
     case LOAD: {
       const session = store.getState().session;
       const expiresIn = session.expires_in;
-      const needsToUpdate = !expiresIn || expiresIn - Date.now() < 10 * 60 * 1000;
+      const needsToUpdate =
+        !expiresIn || expiresIn - Date.now() < 10 * 60 * 1000;
       if (needsToUpdate) {
-        console.log('sessionMiddleware > needs to update access token');
+        console.log("sessionMiddleware > needs to update access token");
         const refreshToken = session.refresh_token;
         if (refreshToken) {
-          console.log('sessionMiddleware > using refresh token');
+          console.log("sessionMiddleware > using refresh token");
           store
             .dispatch(updateToken())
             .then(() => {
@@ -61,7 +66,7 @@ export default store => next => action => {
             });
         }
       } else {
-        console.log('sessionMiddleware > no need to update access token');
+        console.log("sessionMiddleware > no need to update access token");
         store.dispatch(getCurrentUser()).then(() => {
           store.dispatch(loginSuccess());
           store.dispatch(initializeLocalPlayer());
@@ -70,8 +75,10 @@ export default store => next => action => {
       break;
     }
     case LOGIN: {
-      const getLoginURL = scopes => {
-        return `${Config.HOST}/auth/login?scope=${encodeURIComponent(scopes.join(' '))}`;
+      const getLoginURL = (scopes) => {
+        return `${Config.HOST}/auth/login?scope=${encodeURIComponent(
+          scopes.join(" ")
+        )}`;
       };
 
       const width = 450,
@@ -79,20 +86,23 @@ export default store => next => action => {
         left = window.screen.width / 2 - width / 2,
         top = window.screen.height / 2 - height / 2;
 
-      const messageFn = event => {
+      const messageFn = (event) => {
         try {
           const hash = JSON.parse(event.data);
-          if (hash.type === 'access_token') {
-            window.removeEventListener('message', messageFn, false);
+          if (hash.type === "access_token") {
+            window.removeEventListener("message", messageFn, false);
             const accessToken = hash.access_token;
             const expiresIn = hash.expires_in;
-            if (accessToken === '') {
+            if (accessToken === "") {
               // todo: implement login error
             } else {
               const refreshToken = hash.refresh_token;
-              localStorage.setItem('v2_refreshToken', refreshToken);
-              localStorage.setItem('v2_accessToken', accessToken);
-              localStorage.setItem('v2_expiresIn', Date.now() + expiresIn * 1000);
+              localStorage.setItem("v2_refreshToken", refreshToken);
+              localStorage.setItem("v2_accessToken", accessToken);
+              localStorage.setItem(
+                "v2_expiresIn",
+                Date.now() + expiresIn * 1000
+              );
               store.dispatch(updateTokenSuccess(accessToken));
               store.dispatch(getCurrentUser()).then(() => {
                 store.dispatch(initializeLocalPlayer());
@@ -105,26 +115,26 @@ export default store => next => action => {
           console.error(e);
         }
       };
-      window.addEventListener('message', messageFn, false);
+      window.addEventListener("message", messageFn, false);
 
       const url = getLoginURL([
-        'user-read-playback-state',
-        'user-modify-playback-state',
-        "streaming", /* needed for playback, see https://developer.spotify.com/documentation/web-playback-sdk/quick-start/ */
-        "user-read-email", /* needed for playback, see https://developer.spotify.com/documentation/web-playback-sdk/quick-start/ */
-        "user-read-private" /* needed for playback, see https://developer.spotify.com/documentation/web-playback-sdk/quick-start/ */
-     ]);
-     console.log({url})
+        "user-read-playback-state",
+        "user-modify-playback-state",
+        "streaming" /* needed for playback, see https://developer.spotify.com/documentation/web-playback-sdk/quick-start/ */,
+        "user-read-email" /* needed for playback, see https://developer.spotify.com/documentation/web-playback-sdk/quick-start/ */,
+        "user-read-private" /* needed for playback, see https://developer.spotify.com/documentation/web-playback-sdk/quick-start/ */,
+      ]);
+      console.log({ url });
       window.open(
         url,
-        'Spotify',
-        'menubar=no,location=no,resizable=no,scrollbars=no,status=no, width=' +
+        "Spotify",
+        "menubar=no,location=no,resizable=no,scrollbars=no,status=no, width=" +
           width +
-          ', height=' +
+          ", height=" +
           height +
-          ', top=' +
+          ", top=" +
           top +
-          ', left=' +
+          ", left=" +
           left
       );
 

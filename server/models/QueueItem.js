@@ -1,4 +1,4 @@
-const uuid = require('uuid');
+const uuid = require("uuid");
 
 class QueueItem {
   constructor(options = {}) {
@@ -15,7 +15,7 @@ class QueueItem {
       user: this.user,
       track: this.track,
       voters: this.voters,
-      startTimestamp: this.startTimestamp
+      startTimestamp: this.startTimestamp,
     };
   }
 }

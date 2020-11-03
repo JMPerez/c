@@ -1,23 +1,23 @@
-import { UPDATE_USERS } from '../constants/ActionTypes';
-import { HYDRATE } from 'next-redux-wrapper';
+import { UPDATE_USERS } from "../constants/ActionTypes";
+import { HYDRATE } from "next-redux-wrapper";
 const initialState = [
   {
-    id: 'something',
-    name: 'Adrian'
+    id: "something",
+    name: "Adrian",
   },
   {
-    id: 'something',
-    name: 'Bea'
+    id: "something",
+    name: "Bea",
   },
   {
-    id: 'something',
-    name: 'Carlos'
-  }
+    id: "something",
+    name: "Carlos",
+  },
 ];
 
 const UsersReducer = (state, action) => {
   switch (action.type) {
-    case HYDRATE: 
+    case HYDRATE:
       return action.payload.users;
     case UPDATE_USERS:
       return action.data;
