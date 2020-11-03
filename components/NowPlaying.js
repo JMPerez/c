@@ -8,29 +8,49 @@ import ButtonDarkStyle from "./ButtonDarkStyle";
 import { initializeStore } from "../store/store";
 
 const NowPlaying = (props) => {
-  const [start, setStart] = useState(Date.now());
-  const [currentPosition, setCurrentPosition] = useState(0);
   const { playback } = usePlayback();
   const { session } = useSession();
+  const [start, setStart] = useState(playback.startTimestamp);
+  const [currentPosition, setCurrentPosition] = useState(
+    new Date() - playback.startTimestamp
+  );
+
+  console.log(
+    "init: setting position to ",
+    new Date() - playback.startTimestamp
+  );
+
   const reduxStore = initializeStore();
   const { dispatch } = reduxStore;
 
   let timer = null;
   const tick = () => {
-    setCurrentPosition(Date.now() - start + (currentPosition || 0));
+    setCurrentPosition(
+      playback.startTimestamp === 0 ? 0 : Date.now() - playback.startTimestamp
+    );
+    console.log(
+      "tick: setting position to ",
+      playback.startTimestamp === 0 ? 0 : Date.now() - playback.startTimestamp,
+      playback.startTimestamp
+    );
   };
 
   useEffect(() => {
-    setStart(Date.now());
-    setCurrentPosition(0);
+    // setStart(Date.now()); // todo: set this when track changes
+    console.log(
+      "useEffect: setting position to ",
+      Date.now() - playback.startTimestamp
+    );
+    setCurrentPosition(Date.now() - playback.startTimestamp);
     timer = setInterval(tick, 300);
     return () => {
       clearInterval(timer);
     };
   }, [props.position, props.track]);
 
+  console.log({ currentPosition, startTime: playback.startTimestamp });
   const percentage =
-    +((currentPosition * 100) / props.track.duration_ms).toFixed(2) + "%";
+    +((currentPosition * 100) / playback.track.duration_ms).toFixed(2) + "%";
   const userName = props.user.display_name || props.user.id;
   return (
     <div className="now-playing">

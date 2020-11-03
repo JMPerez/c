@@ -20,28 +20,35 @@ const PlaybackMiddleware = (store) => (next) => (action) => {
   const result = next(action);
   switch (action.type) {
     case PLAY_TRACK: {
-      if (process.browser && !store.getState().playback.muted) {
-        fetch(`${SPOTIFY_API_BASE}/me/player/play`, {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${store.getState().session.access_token}`,
-          },
-          body: JSON.stringify({
-            uris: [`spotify:track:${action.track.id}`],
-            position_ms: action.position ?? 0,
-          }),
-        }).then(() => {
-          store.dispatch(playTrackSuccess(action.track, action.user));
-          if (action.isUserInitiated) {
-            store.dispatch(connectSuccess());
-          }
-        });
+      if (process.browser) {
+        const position = action.position ?? 0;
+        if (action.isUserInitiated) {
+          store.dispatch(connectSuccess());
+        }
+        if (
+          store.getState().playback.isConnectedToPlayback ||
+          action.isUserInitiated
+        ) {
+          fetch(`${SPOTIFY_API_BASE}/me/player/play`, {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${store.getState().session.access_token}`,
+            },
+            body: JSON.stringify({
+              uris: [`spotify:track:${action.track.id}`],
+              position_ms: position,
+            }),
+          }).then(() => {
+            console.log("Sent PLAY COMMAND SUCCESSFULLY!");
+          });
+        }
+        store.dispatch(playTrackSuccess(action.track, action.user, position));
       }
       break;
     }
     case CONNECT: {
-      const { track, user, position, startTime } = store.getState().playback;
-      const currentPosition = Date.now() - startTime + position;
+      const { track, user, startTimestamp } = store.getState().playback;
+      const currentPosition = Date.now() - startTimestamp;
       if (isNaN(currentPosition)) {
         console.error("PlaybackMiddleware: Current Position is NaN");
       }
@@ -94,6 +101,7 @@ const PlaybackMiddleware = (store) => (next) => (action) => {
         // Ready
         player.addListener("ready", ({ device_id }) => {
           console.log("Ready with Device ID", device_id);
+          // todo: transfer playback only if no other device is active
           store.dispatch(transferPlaybackToDevice(device_id));
         });
 

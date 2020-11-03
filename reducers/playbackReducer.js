@@ -18,16 +18,14 @@ const PlaybackReducer = (state, action) => {
         ...state,
         track: action.playingContext.track,
         user: action.playingContext.user,
-        position: 0,
+        startTimestamp: action.playingContext.startTimestamp,
       };
     case PLAY_TRACK_SUCCESS:
       return {
         ...state,
         track: action.track,
         user: action.user,
-        position: action.position,
-        startTime: new Date(),
-        isPlaying: true,
+        startTimestamp: new Date() - action.position,
       };
     case CONNECT_SUCCESS:
       return { ...state, isConnectedToPlayback: true };
@@ -41,8 +39,6 @@ const PlaybackReducer = (state, action) => {
         ...state,
         track: action.track,
         user: action.user,
-        position: action.position,
-        startTime: new Date(),
       };
     case QUEUE_ENDED: {
       return initialState;
