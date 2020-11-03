@@ -90,9 +90,9 @@ export default store => next => action => {
               // todo: implement login error
             } else {
               const refreshToken = hash.refresh_token;
-              localStorage.setItem('refreshToken', refreshToken);
-              localStorage.setItem('accessToken', accessToken);
-              localStorage.setItem('expiresIn', Date.now() + expiresIn * 1000);
+              localStorage.setItem('v2_refreshToken', refreshToken);
+              localStorage.setItem('v2_accessToken', accessToken);
+              localStorage.setItem('v2_expiresIn', Date.now() + expiresIn * 1000);
               store.dispatch(updateTokenSuccess(accessToken));
               store.dispatch(getCurrentUser()).then(() => {
                 store.dispatch(initializeLocalPlayer());

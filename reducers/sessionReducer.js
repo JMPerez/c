@@ -9,9 +9,9 @@ const SessionReducer = (state, action) => {
   switch (action.type) {
     case LOAD:
       if (process.browser) {
-        const refreshToken = localStorage.getItem('refreshToken');
-        const accessToken = localStorage.getItem('accessToken');
-        const expiresIn = localStorage.getItem('expiresIn');
+        const refreshToken = localStorage.getItem('v2_refreshToken');
+        const accessToken = localStorage.getItem('v2_accessToken');
+        const expiresIn = localStorage.getItem('v2_expiresIn');
         return Object.assign({}, state, {
           access_token: accessToken,
           refresh_token: refreshToken,
