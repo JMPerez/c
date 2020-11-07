@@ -71,11 +71,10 @@ const PlaybackMiddleware = (store) => (next) => (action) => {
     }
     case INITIALIZE_LOCAL_PLAYER: {
       window.onSpotifyWebPlaybackSDKReady = () => {
-        const token = store.getState().session.access_token;
         const player = new Spotify.Player({
           name: "C - Collaborative",
           getOAuthToken: (cb) => {
-            cb(token);
+            cb(store.getState().session.access_token);
           },
         });
 
