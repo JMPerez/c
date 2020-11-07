@@ -15,7 +15,7 @@ const deviceTypeToImage = function (deviceType) {
   switch (deviceType) {
     case "Computer":
       return "/icon-desktop.svg";
-    case "Mobile":
+    case "Smartphone":
       return "/icon-mobile.svg";
     case "Tablet":
       return "/icon-tablet.svg";
