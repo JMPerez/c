@@ -82,7 +82,7 @@ export default function SocketMiddleware(store) {
   });
 
   socket.on("update users", (data) => {
-    store.dispatch(updateUsers(data));
+    store.dispatch(updateUsers(data.filter((user) => user !== null))); // todo: this should be filtered out on the server
   });
 
   socket.on("update now playing", (track, user, position) => {
